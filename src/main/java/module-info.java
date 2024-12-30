@@ -1,7 +1,8 @@
-module at.ac.fhcampuswien.monkey_bytes {
+module monkeybytes.quiz {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
+    requires com.google.gson;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -11,8 +12,9 @@ module at.ac.fhcampuswien.monkey_bytes {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens at.ac.fhcampuswien.monkey_bytes to javafx.fxml;
-    exports at.ac.fhcampuswien.monkey_bytes.game;
-    exports at.ac.fhcampuswien.monkey_bytes.javafx;
-    opens at.ac.fhcampuswien.monkey_bytes.javafx to javafx.fxml;
+    opens monkeybytes.quiz to javafx.fxml;
+    exports monkeybytes.quiz.game;
+    exports monkeybytes.quiz;
+    exports monkeybytes.quiz.controller;
+    opens monkeybytes.quiz.controller to javafx.fxml;
 }
