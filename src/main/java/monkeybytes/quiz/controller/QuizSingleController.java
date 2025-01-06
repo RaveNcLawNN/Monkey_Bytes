@@ -95,6 +95,7 @@ public class QuizSingleController {
             questionCounterLabel.setText((game.getCurrentQuestionIndex() + 1) + " of " + "10 Questions");
 
             // Update Player Info später implementieren
+
             // Temporär: Test
             currentPlayerLabel.setText("Player: Testplayer");
 
@@ -133,7 +134,7 @@ public class QuizSingleController {
         for (int i = 0; i < buttons.size(); i++) {
             Button button = buttons.get(i);
             if (i == correctIndex) {
-                button.setStyle("-fx-background-color: #28a745; -fx-text-fill: white;");
+                button.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold");
             } else if (i == selectedIndex && i != correctIndex) {
                 button.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
             } else {

@@ -11,8 +11,8 @@
    <children>
       <Pane fx:id="headerPane" layoutX="16.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="770.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
-            <Label fx:id="questionCounterLabel" layoutX="15.0" layoutY="45.0" styleClass="headerLabel" text="x of 10 Questions" />
-            <Label fx:id="timerLabel" layoutX="714.0" layoutY="45.0" styleClass="headerLabel" text="xx" />
+            <Label fx:id="questionCounterLabel" layoutY="45.0" styleClass="headerLabel" text="x of 10 Questions" />
+            <Label fx:id="timerLabel" layoutX="714.0" layoutY="45.0" styleClass="headerLabel" text="⏳xx" />
             <Label fx:id="currentPlayerLabel" layoutX="287.0" layoutY="45.0" styleClass="headerLabel" text="Player: Testplayer" />
          </children>
          <padding>
