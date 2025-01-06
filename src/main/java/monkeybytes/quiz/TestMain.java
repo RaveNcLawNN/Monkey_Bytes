@@ -104,7 +104,7 @@ public class TestMain {
         // Gewinner ermitteln
         System.out.println(multiplayer.getWinner()); // Erwartet: Player 2 wins with 10 points!
     }
-     */
+    */
 }
 
 
