@@ -54,9 +54,9 @@ public class PlayerDataManager {
     }
 
     //Übernimmt Spieler und einen zu aktualisierenden Score. Aktualisiert den Score, oder erstellt ein neues Objekt.
-    //In der aktuellen Version nur sinnvoll am Ende der des Spiels.
-    //Idee: Update und Objekterstellung trennen/eigene Methoden?
-    public void updatePlayerScore(String playerName, int newScore) {
+    //Glaub am besten einzusetzen 1x bei der Erstellung des Namens vor dem Spiel mit newScore = 0 und 1x am Ende des Spiels.
+    //So ist sichergestellt, dass, auch wenn kein Spiel beendet wird, der Player gespeichert wird und auch gut in der Highscore Tabelle angezeigt werden kann.
+    public void updatePlayerInformation(String playerName, int newScore) {
 
         boolean playerFound = false;
 

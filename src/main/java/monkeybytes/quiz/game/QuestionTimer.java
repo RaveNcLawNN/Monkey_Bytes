@@ -9,12 +9,12 @@ public class QuestionTimer {
     private Timer timer;
     private int timeLimitInSeconds;
     private long startTime;
-    private boolean timeUp;
+    private boolean isTimerUp;
 
     //Konstruktor für den QuestionTimer.
     public QuestionTimer(int timeLimitInSeconds) {
         this.timeLimitInSeconds = timeLimitInSeconds;
-        this.timeUp = false;
+        this.isTimerUp = false;
     }
 
     //Startet den Timer.
@@ -22,7 +22,7 @@ public class QuestionTimer {
         //Stoppt etwaige alte Timer.
         stopTimer();
         //Setzt timeUp auf false, weil ein neuer Timer gestartet wird.
-        timeUp = false;
+        isTimerUp = false;
         //Prüft Startzeit. Wichtig für die berechnung der verbleibenden Zeit, um später die gesamten Punkte zu berechnen.
         startTime = System.currentTimeMillis();
         //Startet den Timer.
@@ -33,7 +33,7 @@ public class QuestionTimer {
             @Override
             //Die Methode "run" der Klasse "TimerTask" wird überschrieben, um den Timer nach Ablauf der Zeit zu stoppen.
             public void run() {
-                timeUp = true;
+                isTimerUp = true;
                 stopTimer();
             }
             //timeLimitInSeconds wird mit 1000 (für Millisekunden) als Long multipliziert, weil das als Input von TimerTask erwartet wird.
@@ -49,13 +49,13 @@ public class QuestionTimer {
     }
 
     //Gibt aus, ob die Zeit abgelaufen ist.
-    public boolean getTimeUp() {
-        return timeUp;
+    public boolean getTimerUp() {
+        return isTimerUp;
     }
 
     //Findet die verbleibende Zeit heraus, um sie z.B. für die Berechnung der Punkte zu verwenden.
     public int getRemainingTime() {
-        if (timeUp) {
+        if (isTimerUp) {
             return 0;
         }
         long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
