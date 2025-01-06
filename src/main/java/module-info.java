@@ -17,4 +17,5 @@ module monkeybytes.quiz {
     exports monkeybytes.quiz;
     exports monkeybytes.quiz.controller;
     opens monkeybytes.quiz.controller to javafx.fxml;
+    opens monkeybytes.quiz.game to com.google.gson;
 }

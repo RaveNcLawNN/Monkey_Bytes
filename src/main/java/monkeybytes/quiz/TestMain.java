@@ -10,13 +10,47 @@ Diese Main ist zum Testen der Spiellogik in der Konsole.
 
 public class TestMain {
     public static void main(String[] args) {
-        // Testen des Singleplayer-Spiels
-        testSingleplayer();
+        String fileName = "src/main/resources/data/playerData.json";
 
-        // Testen des Multiplayer-Spiels
-        testMultiplayer();
+        // Initialize the PlayerDataManager
+        PlayerDataManager manager = new PlayerDataManager(fileName);
+
+        // Test 1: Add a new player
+        System.out.println("Adding new player...");
+        manager.updatePlayerInformation("Alice", 100);
+        System.out.println("Player added.");
+
+        // Test 2: Update the same player's score (higher score)
+        System.out.println("Updating player score (higher)... ");
+        manager.updatePlayerInformation("Alice", 150);
+        System.out.println("Score updated.");
+
+        // Test 3: Try to update with a lower score (should not update)
+        System.out.println("Updating player score (lower)... ");
+        manager.updatePlayerInformation("Alice", 50);
+        System.out.println("Score should not update.");
+
+        // Test 4: Add another player
+        System.out.println("Adding another player...");
+        manager.updatePlayerInformation("Bob", 600);
+        System.out.println("Another player added.");
+
+        // Test 5: Add another player
+        System.out.println("Adding another player...");
+        manager.updatePlayerInformation("Player5", 0);
+        System.out.println("Another player added.");
+
+        // Test 5: Retrieve and print all players
+        System.out.println("Retrieving all players...");
+        List<Player> players = manager.getPlayers();
+        for (Player player : players) {
+            System.out.println("Player: " + player.getName() + ", Score: " + player.getScore());
+        }
+
+        System.out.println("All tests completed.");
     }
 
+    /*
     private static void testSingleplayer() {
         System.out.println("=== Singleplayer Test ===");
 
@@ -70,6 +104,7 @@ public class TestMain {
         // Gewinner ermitteln
         System.out.println(multiplayer.getWinner()); // Erwartet: Player 2 wins with 10 points!
     }
+     */
 }
 
 
