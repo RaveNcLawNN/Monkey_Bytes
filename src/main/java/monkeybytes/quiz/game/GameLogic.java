@@ -49,6 +49,11 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
         return currentQuestionIndex % playerScores.length; // durch Modulo wird sichergestellt, dass sich die Spieler im Multiplayer immer abwechseln.
     }
 
+    //getter-Methode, die den aktuellen Question Index zurückgibt.
+    public int getCurrentQuestionIndex() {
+        return currentQuestionIndex;
+    }
+
 }
 
 //    private List<Question> questions; // Liste aller Fragen im Quiz

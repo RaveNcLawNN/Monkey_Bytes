@@ -1,0 +1,63 @@
+/* root - Stil für das Root-Element (AnchorPane) */
+.root {
+    -fx-pref-width: 800;
+    -fx-pref-height: 600;
+}
+
+/* pane - Stil für alle Pane-Elemente */
+.pane {
+}
+
+/* answerButton - Stil für alle Antwort-Buttons */
+.answerButton {
+    -fx-background-color: #f34626;  /* Hintergrundfarbe */
+    -fx-background-radius: 15;      /* Abgerundete Ecken */
+    -fx-border-color: black;        /* Rahmenfarbe */
+    -fx-border-radius: 15;          /* Abgerundete Rahmen */
+    -fx-font-family: "Segoe UI";    /* Schriftart */
+    -fx-font-size: 23px;            /* Schriftgröße */
+    -fx-text-fill: white;           /* Textfarbe */
+    -fx-alignment: center;          /* Textausrichtung */
+}
+
+.answerButton:hover {
+    -fx-background-color: #d6331c;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+/* answerLabel - Stil für die Answer-Labels (A-D) */
+.answerLabel {
+    -fx-background-color: #f34626;  /* Hintergrundfarbe */
+    -fx-background-radius: 15;      /* Abgerundete Ecken */
+    -fx-border-color: black;        /* Rahmenfarbe */
+    -fx-border-radius: 15;          /* Abgerundete Rahmen */
+    -fx-font-family: "Segoe UI";    /* Schriftart */
+    -fx-font-size: 23px;            /* Schriftgröße */
+    -fx-text-fill: white;           /* Textfarbe */
+    -fx-alignment: center;          /* Textausrichtung */
+}
+
+/* headerLabel - Stil für alle Header-Labels */
+.headerLabel {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 23px;
+    -fx-alignment: center;
+    -fx-padding: 10 10 10 10;
+}
+
+/* questionLabel - Stil für alle Question-Labels */
+.questionLabel {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 30px;
+    -fx-alignment: center;
+}
+
+/* questionSeparator - Stil für alle Question-Separators */
+.questionSeparator {
+    -fx-background-color: #f34626;
+    -fx-pref-height: 10px;
+    -fx-border-color: black;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
