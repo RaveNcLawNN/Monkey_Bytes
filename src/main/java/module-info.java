@@ -11,6 +11,7 @@ module monkeybytes.quiz {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires org.apache.commons.text;
 
     opens monkeybytes.quiz to javafx.fxml;
     exports monkeybytes.quiz.game;
