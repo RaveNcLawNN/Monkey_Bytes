@@ -65,7 +65,8 @@ public class QuizSingleController {
         List<Question> questions = List.of(
                 new Question("What is the periodic symbol for Iron?", List.of("Fe", "Ir", "In", "Io"), 0),
                 new Question("What is 2 + 2?", List.of("3", "4", "5", "6"), 1),
-                new Question("What is the capital of Slovakia?", List.of("Vienna", "London", "Bratislava", "Budapest"), 2)
+                new Question("What is the capital of Slovakia?", List.of("Vienna", "London", "Bratislava", "Budapest"), 2),
+                new Question("Never gonna give you up ... ?", List.of("Never gonna hunt you down.", "Never gonna throw you up.", "Never gonna let you down.", "Never gonna put you down."), 2)
         );
         game = new Singleplayer(questions);
 
@@ -123,7 +124,7 @@ public class QuizSingleController {
             game.checkAnswer(answerIndex);
 
             // Kurze Verzögerung, erst dann wird die nächste geladen
-            PauseTransition pause = new PauseTransition(Duration.seconds(2.5));
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(event -> loadQuestion());
             pause.play();
         }

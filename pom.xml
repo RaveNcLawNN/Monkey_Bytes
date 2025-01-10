@@ -146,7 +146,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                at.ac.fhcampuswien.monkey_bytes/monkeybytes.quiz.Main
+                               monkeybytes.quiz.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
