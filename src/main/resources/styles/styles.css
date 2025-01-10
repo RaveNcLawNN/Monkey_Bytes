@@ -2,15 +2,37 @@
 .root {
     -fx-pref-width: 800;
     -fx-pref-height: 600;
+    -fx-background-color: #ffeab3;
 }
 
 /* pane - Stil für alle Pane-Elemente */
 .pane {
 }
 
+/* rulePane - Stil für die Rule-Panes */
+.rulePane {
+    -fx-padding: 15;
+    -fx-border-color: black;
+    -fx-border-width: 2.5;
+}
+
+/* ruleLabels - Stil für die Rule-Labels */
+.ruleLabels {
+    -fx-font-family: "Segoe UI";
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+}
+
+/* ruleHeader - Stil für die ruleHeaders */
+.ruleHeader {
+    -fx-font-family: "Segoe UI Black";
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+}
+
 /* answerButton - Stil für alle Antwort-Buttons */
 .answerButton {
-    -fx-background-color: #f34626;  /* Hintergrundfarbe */
+    -fx-background-color: #ffa000;  /* Hintergrundfarbe */
     -fx-background-radius: 15;      /* Abgerundete Ecken */
     -fx-border-color: black;        /* Rahmenfarbe */
     -fx-border-radius: 15;          /* Abgerundete Rahmen */
@@ -20,15 +42,41 @@
     -fx-alignment: center;          /* Textausrichtung */
 }
 
+/* answerButton:hover - Markiert den Antwort-Button sobald man drüber hovert */
 .answerButton:hover {
-    -fx-background-color: #d6331c;
+    -fx-background-color: #ff8c00;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+/* guiButton - Stil für alle GUI-Buttons */
+.guiButton {
+    -fx-background-color: #ffa000;
+    -fx-background-radius: 20;
+    -fx-border-color: black;
+    -fx-border-radius: 20;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+/* guiButton:hover - Markiert den GUI-Button sobald man drüber hovert */
+.guiButton:hover {
+    -fx-background-color: #ff8c00;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+/* settings-highscore-Button - Stil für die Icon-Buttons im Main Menu */
+.settings-highscore-Button {
+    -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
 /* answerLabel - Stil für die Answer-Labels (A-D) */
 .answerLabel {
-    -fx-background-color: #f34626;  /* Hintergrundfarbe */
+    -fx-background-color: #ffa000;  /* Hintergrundfarbe */
     -fx-background-radius: 15;      /* Abgerundete Ecken */
     -fx-border-color: black;        /* Rahmenfarbe */
     -fx-border-radius: 15;          /* Abgerundete Rahmen */
@@ -55,7 +103,7 @@
 
 /* questionSeparator - Stil für alle Question-Separators */
 .questionSeparator {
-    -fx-background-color: #f34626;
+    -fx-background-color: #ffa000;
     -fx-pref-height: 10px;
     -fx-border-color: black;
     -fx-border-radius: 10;

@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #f9f9f9;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.RulesController">
 
-    <!-- Singleplayer Mode Section -->
-    <VBox layoutX="-2.0" prefHeight="503.0" prefWidth="372.0" style="-fx-background-color: #66cdaa; -fx-border-color: black; -fx-border-width: 1; -fx-padding: 15;">
-        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Singleplayer Mode" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="1. Each question has only one correct answer." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="2. Player has 30 seconds to answer each question." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="3. Once you select your answer, it cannot be undone." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="4. Answers cannot be submitted once the timer runs out." wrapText="true" />
-        <Label prefHeight="18.0" prefWidth="282.0" style="-fx-font-size: 14px; -fx-text-fill: white;" text="5. Points are awarded based on correct answers." wrapText="true" />
+    <VBox fx:id="singleVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #66cdaa;" styleClass="rulePane">
+        <Label fx:id="singleRulesLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="370.0" styleClass="ruleHeader" text="Singleplayer Mode" />
+        <Label fx:id="singleRuleLabel1" styleClass="ruleLabels" text="1. Each question has only one correct answer." wrapText="true" />
+        <Label fx:id="singleRuleLabel2" styleClass="ruleLabels" text="2. Player has 30 seconds to answer each question." wrapText="true" />
+        <Label fx:id="singleRuleLabel3" styleClass="ruleLabels" text="3. Once you select your answer, it cannot be undone." wrapText="true" />
+        <Label fx:id="singleRuleLabel4" styleClass="ruleLabels" text="4. Answers cannot be submitted once the timer runs out." wrapText="true" />
+        <Label fx:id="singleRuleLabel5" prefHeight="18.0" prefWidth="282.0" styleClass="ruleLabels" text="5. Points are awarded based on correct answers." wrapText="true" />
     </VBox>
 
-    <!-- Multiplayer Mode Section -->
-    <VBox layoutX="368.0" prefHeight="503.0" prefWidth="434.0" style="-fx-background-color: #ff69b4; -fx-border-color: black; -fx-border-width: 1; -fx-padding: 15;">
-        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Multiplayer Mode" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="1. Each question has only one correct answer." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="2. Players have 30 seconds to answer each question." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="3. Both players are given the same question; ensure the other player cannot see your answer." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="4. Once you select your answer, it cannot be undone." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="5. Answers cannot be submitted once the timer runs out." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="6. Points are awarded based on correct answers." wrapText="true" />
-        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="7. The player with the higher score wins the game." wrapText="true" />
+    <VBox fx:id="multiVBox" layoutX="400.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #ff69b4;" styleClass="rulePane">
+        <Label fx:id="multiRulesLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="370.0" styleClass="ruleHeader" text="Multiplayer Mode" />
+        <Label fx:id="multiRuleLabel1" styleClass="ruleLabels" text="1. Each question has only one correct answer." wrapText="true" />
+        <Label fx:id="multiRuleLabel2" styleClass="ruleLabels" text="2. Players have 30 seconds to answer each question." wrapText="true" />
+        <Label fx:id="multiRuleLabel3" styleClass="ruleLabels" text="3. Both players are given the same question; ensure the other player cannot see your answer." wrapText="true" />
+        <Label fx:id="multiRuleLabel4" styleClass="ruleLabels" text="4. Once you select your answer, it cannot be undone." wrapText="true" />
+        <Label fx:id="multiRuleLabel5" styleClass="ruleLabels" text="5. Answers cannot be submitted once the timer runs out." wrapText="true" />
+        <Label fx:id="multiRuleLabel6" styleClass="ruleLabels" text="6. Points are awarded based on correct answers." wrapText="true" />
+        <Label fx:id="multiRuleLabel7" styleClass="ruleLabels" text="7. The player with the higher score wins the game." wrapText="true" />
     </VBox>
+    <HBox fx:id="guiPane" layoutX="275.0" layoutY="480.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="250.0">
+        <children>
 
-          <!-- "Understood" Button -->
-    <Button layoutX="319.0" layoutY="430.0" prefHeight="40.0" prefWidth="163.0" style="-fx-background-color: #add8e6; -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black;" text="Understood" />
+            <Button fx:id="understoodButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="220.0" styleClass="guiButton" text="Understood" />
+        </children>
+        <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+        </padding>
+    </HBox>
 </AnchorPane>

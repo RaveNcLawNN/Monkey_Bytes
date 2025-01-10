@@ -64,7 +64,8 @@ public class QuizSingleController {
         // Test-Daten da noch keine API
         List<Question> questions = List.of(
                 new Question("What is the periodic symbol for Iron?", List.of("Fe", "Ir", "In", "Io"), 0),
-                new Question("What is 2 + 2?", List.of("3", "4", "5", "6"), 1)
+                new Question("What is 2 + 2?", List.of("3", "4", "5", "6"), 1),
+                new Question("What is the capital of Slovakia?", List.of("Vienna", "London", "Bratislava", "Budapest"), 2)
         );
         game = new Singleplayer(questions);
 
@@ -122,7 +123,7 @@ public class QuizSingleController {
             game.checkAnswer(answerIndex);
 
             // Kurze Verzögerung, erst dann wird die nächste geladen
-            PauseTransition pause = new PauseTransition(Duration.seconds(3));
+            PauseTransition pause = new PauseTransition(Duration.seconds(2.5));
             pause.setOnFinished(event -> loadQuestion());
             pause.play();
         }
@@ -134,11 +135,11 @@ public class QuizSingleController {
         for (int i = 0; i < buttons.size(); i++) {
             Button button = buttons.get(i);
             if (i == correctIndex) {
-                button.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold");
+                button.setStyle("-fx-background-color: #16ad09; -fx-text-fill: white; -fx-font-weight: bold");
             } else if (i == selectedIndex && i != correctIndex) {
-                button.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
+                button.setStyle("-fx-background-color: red; -fx-text-fill: white;");
             } else {
-                button.setStyle("-fx-background-color: #f34626; -fx-text-fill: white;");
+                button.setStyle("-fx-background-color: #ffa000; -fx-text-fill: white;");
             }
         }
     }
@@ -183,7 +184,7 @@ public class QuizSingleController {
     }
 
     private void resetButtonStyles() {
-        List<Button> buttons = List.of(optionAButton, optionBButton, optionCButton);
+        List<Button> buttons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
 
         for (Button button : buttons) {
             button.setStyle(null); // reset styles damit die styles.css wieder gelten

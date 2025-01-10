@@ -12,6 +12,7 @@ module monkeybytes.quiz {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires org.apache.commons.text;
+    requires java.desktop;
 
     opens monkeybytes.quiz to javafx.fxml;
     exports monkeybytes.quiz.game;
