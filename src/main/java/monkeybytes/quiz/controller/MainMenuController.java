@@ -5,7 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.scene.Scene;
+import javafx.stage.StageStyle;
+
 
 public class MainMenuController {
 
@@ -76,12 +81,34 @@ public class MainMenuController {
         }
     }
 
-    // wird aufgerufen wenn man auf settings drückt
+    // wird aufgerufen wenn man auf highscore drückt
     private void openHighscorePopUp() {
         try {
-            Stage highscore = new Stage();
+            //öffnet ein neues Fenster (== Stage) für highscore.fxml:
+            Stage highscoreStage = new Stage();
 
-            // fehlt noch. same wie bei settings
+            //Erstellt einen FXML Loader und lädt die Inhalte aus highscore.fxml:
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popups/highscores.fxml"));
+
+            //Erstellt eine neue Szene (== Container für Inhalt der Stage) basierend auf der dazugehörige Root Node (mit FXML Loader geladen):
+            Scene highscoreScene = new Scene(fxmlLoader.load());
+            //Entfernt weißen default BG für runde Ecken:
+            highscoreScene.setFill(Color.TRANSPARENT);
+
+            //Verbindet Stage mit Scene:
+            highscoreStage.setScene(highscoreScene);
+
+            //Blockiert Interaktionen mit dem Parent Window (== Main Menu):
+            highscoreStage.initModality(Modality.WINDOW_MODAL);
+
+            //Verbindet das Highscore Fenster mit dem Parent Window:
+            highscoreStage.initOwner(rootPane.getScene().getWindow());
+
+            //Macht das Highscore Fenster transparent damit Runde Ecken funktionieren und entfernt title bar:
+            highscoreStage.initStyle(StageStyle.TRANSPARENT);
+
+            //Macht das Fenster am Bildschirm sichtbar:
+            highscoreStage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
