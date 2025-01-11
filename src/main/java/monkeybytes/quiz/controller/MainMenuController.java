@@ -27,17 +27,17 @@ public class MainMenuController {
     @FXML
     public void initialize() {
         //event handler
-        playGameButton.setOnAction(event -> openQuizSingleScreen());
+        playGameButton.setOnAction(event -> openModeSelectionScreen());
         rulesButton.setOnAction(event -> openRulesScreen());
         settingsButton.setOnAction(event -> openSettingsPopUp());
         highscoreButton.setOnAction(event -> openHighscorePopUp());
     }
 
     // wird aufgerufen wenn man auf play game drückt
-    private void openQuizSingleScreen() {
+    private void openModeSelectionScreen() {
         try {
-            // lädt die quiz single screen (jetzt mal zum testen, weil noch keine selection screens fertig sind)
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/quiz-single-screen.fxml"));
+            // lädt den mode-selection-screen
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/mode-selection-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="monkeybytes.quiz.Selectionscreen"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.ProfileSingleController">
+   <children>
+      <Button fx:id="testButton" layoutX="297.0" layoutY="225.0" mnemonicParsing="false" prefHeight="151.0" prefWidth="206.0" text="TEST" />
+   </children>
 </AnchorPane>
