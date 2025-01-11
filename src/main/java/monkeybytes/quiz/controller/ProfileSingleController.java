@@ -23,7 +23,7 @@ public class ProfileSingleController {
     private void openSelectionScreen() {
         try {
             // lädt den selection difficulty topic screen (noch nicht fertig - leitet jetzt mal direkt zum quiz single screen weiter)
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/quiz-single-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/quiz-single-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet

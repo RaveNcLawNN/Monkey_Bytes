@@ -188,7 +188,7 @@ public class QuizSingleController {
         List<Button> buttons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
 
         for (Button button : buttons) {
-            button.setStyle(null); // reset styles damit die styles.css wieder gelten
+            button.setStyle(null); // reset styles damit die screen-styles.css wieder gelten
         }
     }
 }

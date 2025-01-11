@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.monkey_bytes.EndSingleScreen">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.EndSingleController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="5.0" layoutX="19.0" layoutY="95.0" stroke="RED" strokeType="INSIDE" width="762.0" />
       <TextArea layoutX="300.0" layoutY="40.0" prefHeight="45.0" prefWidth="200.0" />

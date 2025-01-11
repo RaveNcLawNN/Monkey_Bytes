@@ -3,7 +3,6 @@ package monkeybytes.quiz.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -25,7 +24,7 @@ public class RulesController {
     // wird aufgerufen wenn man auf understood klickt
     private void returnToMainMenu() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/main-menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/main-menu.fxml"));
             Parent mainMenuRoot = fxmlLoader.load();
 
             Stage currentStage = (Stage) rootPane.getScene().getWindow();

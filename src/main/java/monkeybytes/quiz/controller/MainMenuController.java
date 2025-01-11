@@ -37,7 +37,7 @@ public class MainMenuController {
     private void openModeSelectionScreen() {
         try {
             // lädt den mode-selection-screen
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/mode-selection-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/mode-selection-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet
@@ -52,7 +52,7 @@ public class MainMenuController {
     // wird aufgerufen wenn man auf rules drückt
     private void openRulesScreen() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/rules-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/rules-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet

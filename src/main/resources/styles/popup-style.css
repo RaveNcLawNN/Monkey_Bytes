@@ -1,0 +1,18 @@
+/* root - Stil für das Root-Element (alle 800x600 Popups) */
+.root {
+    -fx-pref-width: 400;
+    -fx-pref-height: 300;
+    -fx-background-color: #ffeab3;
+    -fx-background-radius: 35;
+    -fx-border-color: black;
+    -fx-border-radius: 35;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}
+
+
+.settingsLabel {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: black;
+    -fx-font-size: 23px;
+}

@@ -1,12 +1,8 @@
-/* root - Stil für das Root-Element (AnchorPane) */
+/* root - Stil für das Root-Element (alle 800x600 Screens) */
 .root {
     -fx-pref-width: 800;
     -fx-pref-height: 600;
     -fx-background-color: #ffeab3;
-}
-
-/* pane - Stil für alle Pane-Elemente */
-.pane {
 }
 
 /* modeButton1 - Stil für Mode-Button1 (mode-selection-screen.fxml) */
@@ -47,47 +43,28 @@
     -fx-cursor: hand;
 }
 
-/* rulePane - Stil für die Rule-Panes (rule-screen.fxml) */
+/* rulePane - Stil für die Rule-Panes (rules-screen.fxml) */
 .rulePane {
     -fx-padding: 15;
     -fx-border-color: black;
     -fx-border-width: 1.5;
 }
 
-/* ruleLabels - Stil für die Rule-Labels */
+/* ruleLabels - Stil für die Rule-Labels (rules-screen.fxml) */
 .ruleLabels {
     -fx-font-family: "Segoe UI";
     -fx-text-fill: white;
     -fx-font-size: 17px;
 }
 
-/* ruleHeader - Stil für die ruleHeaders */
+/* ruleHeader - Stil für die ruleHeaders (rules-screen.fxml) */
 .ruleHeader {
     -fx-font-family: "Segoe UI Black";
     -fx-text-fill: white;
     -fx-font-size: 30px;
 }
 
-/* answerButton - Stil für alle Antwort-Buttons */
-.answerButton {
-    -fx-background-color: #ffa000;  /* Hintergrundfarbe */
-    -fx-background-radius: 15;      /* Abgerundete Ecken */
-    -fx-border-color: black;        /* Rahmenfarbe */
-    -fx-border-radius: 15;          /* Abgerundete Rahmen */
-    -fx-font-family: "Segoe UI";    /* Schriftart */
-    -fx-font-size: 23px;            /* Schriftgröße */
-    -fx-text-fill: white;           /* Textfarbe */
-    -fx-alignment: center;          /* Textausrichtung */
-}
-
-/* answerButton:hover - Markiert den Antwort-Button sobald man drüber hovert */
-.answerButton:hover {
-    -fx-background-color: #ff8c00;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
-    -fx-cursor: hand;
-}
-
-/* guiButton - Stil für alle GUI-Buttons */
+/* guiButton - Stil für alle GUI-Buttons (rules-screen.fxml / main-menu.fxml) */
 .guiButton {
     -fx-background-color: #ffa000;
     -fx-background-radius: 20;
@@ -99,20 +76,39 @@
     -fx-alignment: center;
 }
 
-/* guiButton:hover - Markiert den GUI-Button sobald man drüber hovert */
+/* guiButton:hover - Markiert den GUI-Button sobald man drüber hovert (rules-screen.fxml / main-menu.fxml) */
 .guiButton:hover {
     -fx-background-color: #ff8c00;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
     -fx-cursor: hand;
 }
 
-/* settings-highscore-Button - Stil für die Icon-Buttons im Main Menu */
+/* settings-highscore-Button - Stil für die Icon-Buttons im Main Menu (main-menu.fxml) */
 .settings-highscore-Button {
     -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
-/* answerLabel - Stil für die Answer-Labels (A-D) */
+/* answerButton - Stil für alle Antwort-Buttons (quiz-single-screen.fxml / quiz-multi-screen.fxml) */
+.answerButton {
+    -fx-background-color: #ffa000;  /* Hintergrundfarbe */
+    -fx-background-radius: 15;      /* Abgerundete Ecken */
+    -fx-border-color: black;        /* Rahmenfarbe */
+    -fx-border-radius: 15;          /* Abgerundete Rahmen */
+    -fx-font-family: "Segoe UI";    /* Schriftart */
+    -fx-font-size: 23px;            /* Schriftgröße */
+    -fx-text-fill: white;           /* Textfarbe */
+    -fx-alignment: center;          /* Textausrichtung */
+}
+
+/* answerButton:hover - Markiert den Antwort-Button sobald man drüber hovert (quiz-single-screen.fxml / quiz-multi-screen.fxml) */
+.answerButton:hover {
+    -fx-background-color: #ff8c00;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+/* answerLabel - Stil für die Answer-Labels (A-D) (quiz-single-screen.fxml / quiz-multi-screen.fxml) */
 .answerLabel {
     -fx-background-color: #ffa000;  /* Hintergrundfarbe */
     -fx-background-radius: 15;      /* Abgerundete Ecken */
@@ -124,7 +120,7 @@
     -fx-alignment: center;          /* Textausrichtung */
 }
 
-/* headerLabel - Stil für alle Header-Labels */
+/* headerLabel - Stil für alle Header-Labels (quiz-single-screen.fxml / quiz-multi-screen.fxml) */
 .headerLabel {
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 23px;
@@ -132,14 +128,14 @@
     -fx-padding: 10 10 10 10;
 }
 
-/* questionLabel - Stil für alle Question-Labels */
+/* questionLabel - Stil für alle Question-Labels (quiz-single-screen.fxml / quiz-multi-screen.fxml) */
 .questionLabel {
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 30px;
     -fx-alignment: center;
 }
 
-/* questionSeparator - Stil für alle Question-Separators */
+/* questionSeparator - Stil für alle Question-Separators (quiz-single-screen.fxml / quiz-multi-screen.fxml) */
 .questionSeparator {
     -fx-background-color: #ffa000;
     -fx-pref-height: 10px;

@@ -27,7 +27,7 @@ public class ModeSelectionController {
     private void openProfileSingleScreen() {
         try {
             // lädt den profile single screen (noch nicht fertig - leitet jetzt mal direkt zum quiz single screen weiter)
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/profile-single-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/profile-single-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet
@@ -42,7 +42,7 @@ public class ModeSelectionController {
     private void openProfileMultiScreen() {
         try {
             // lädt den profile multi screen (noch nicht fertig - also jetzt mal leer)
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/profile-multi-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/profile-multi-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet
