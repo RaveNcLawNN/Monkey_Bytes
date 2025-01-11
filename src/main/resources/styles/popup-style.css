@@ -1,6 +1,6 @@
-/* root - Stil für das Root-Element (alle 250x300 Popups) */
+/* root - Stil für das Root-Element (alle 800x600 Popups) */
 .root {
-    -fx-pref-width: 250;
+    -fx-pref-width: 400;
     -fx-pref-height: 300;
     -fx-background-color: #ffeab3;
     -fx-background-radius: 35;
@@ -8,6 +8,16 @@
     -fx-border-radius: 35;
     -fx-border-width: 2;
     -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}
+
+.rootScore {
+    -fx-pref-width: 600;
+    -fx-pref-height: 400;
+    -fx-background-color: #B9E38D;
+    -fx-background-radius: 35;
+    -fx-border-color: black;
+    -fx-border-radius: 35;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
@@ -93,4 +103,36 @@
     -fx-background-color: #ff8c00;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
     -fx-cursor: hand;
+}
+
+.highScoreTable {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: black;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+}
+
+.highScoreTable .column-header {
+    -fx-background-color: #FFD794;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 1px 0;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI Bold";
+    -fx-text-fill: black;
+    -fx-alignment: center;
+}
+
+.highScoreTable .table-row-cell:odd {
+    -fx-background-color: #FFEDCE;
+}
+
+.highScoreTable .table-row-cell:even {
+    -fx-background-color: #ffffff;
+}
+
+.highScoreTable .table-cell {
+    -fx-font-size: 12px;
+    -fx-font-family: "Segoe UI";
+    -fx-text-fill: black;
+    -fx-alignment: center;
 }

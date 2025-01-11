@@ -5,8 +5,15 @@ public class Player {
     private int score;
 
     public Player (String name, int score) {
+        if (!validName(name)) {
+            throw new IllegalArgumentException("Name not allowed");
+        }
         this.name = name;
         this.score = 0;
+    }
+
+    private boolean validName (String name) {
+        return name != null && name.matches("[a.zA-Z0-9]{3,15}");
     }
 
     public String getName() {
