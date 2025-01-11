@@ -3,9 +3,12 @@ package monkeybytes.quiz.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainMenuController {
 
@@ -67,9 +70,28 @@ public class MainMenuController {
     // wird aufgerufen wenn man auf settings drückt
     private void openSettingsPopUp() {
         try {
-            Stage settings = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popups/settings-popup.fxml"));
+            Parent root = fxmlLoader.load();
 
-            // fehlt noch. die idee ist ein pop up. muss ich mir noch anschauen
+            Stage settings = new Stage();
+            settings.initStyle(StageStyle.UNDECORATED); // entfernt die obere Leiste
+            settings.initStyle(StageStyle.TRANSPARENT); // fensterrand transparent damit man die runden ecken sieht
+            settings.initModality(Modality.APPLICATION_MODAL); // blockiert das hauptfenster
+            settings.initOwner(rootPane.getScene().getWindow());
+
+            // setzt die größe auf 250x300
+            settings.setWidth(250);
+            settings.setHeight(300);
+
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT); // fensterrand transparent damit man die runden ecken sieht
+            settings.setScene(scene);
+
+            // verhindert das schließen anders als durch den exit button
+            settings.setOnCloseRequest(event -> event.consume());
+
+            // zeigt das fenster
+            settings.showAndWait();
 
         } catch (Exception e) {
             e.printStackTrace();

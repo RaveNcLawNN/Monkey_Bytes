@@ -1,18 +1,96 @@
-/* root - Stil für das Root-Element (alle 800x600 Popups) */
+/* root - Stil für das Root-Element (alle 250x300 Popups) */
 .root {
-    -fx-pref-width: 400;
+    -fx-pref-width: 250;
     -fx-pref-height: 300;
     -fx-background-color: #ffeab3;
     -fx-background-radius: 35;
     -fx-border-color: black;
     -fx-border-radius: 35;
+    -fx-border-width: 2;
     -fx-padding: 20;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
-
+/* settingsLabel - Stil für den Settings-Header (settings-popup.fxml) */
 .settingsLabel {
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: black;
     -fx-font-size: 23px;
+}
+
+/* labelSeparator - Stil für den Setting-Separator (settings-separator.fxml) */
+.labelSeparator {
+    -fx-background-color: #ffa000;
+    -fx-pref-height: 5px;
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* volumeSlider - Stil für den Volume-Slider (settings-popup.fxml) */
+.volumeSlider {
+    -fx-background-color: #ffa000;
+    -fx-background-radius: 15;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+}
+
+/* volumeSlider .track - Stil für den Volume-Slider (Hintergrund der Spur) (settings-popup.fxml) */
+.volumeSlider .track {
+    -fx-background-color: #d3d3d3;
+    -fx-border-radius: 5;
+}
+
+/* volumeSlider .thumb - Stil für den Volume-Slider (beweglicher Punkt) (settings-popup.fxml) */
+.volumeSlider .thumb {
+    -fx-background-color: black;
+    -fx-background-radius: 50;
+    -fx-cursor: hand;
+}
+
+/* muteBox - Stil für die muteBox (settings-popup.fxml) */
+.muteBox {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+}
+
+/* muteBox .box - Stil für die muteBox (nur der Check-Box) (settings-popup.fxml) */
+.muteBox .box {
+    -fx-background-color: #ffa000;
+    -fx-background-radius: 5;
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+/* muteBox .box:selected - Stil für die muteBox (was passiert wenn man die Check-Box anklickt) (settings-popup.fxml) */
+.muteBox .box:selected {
+    -fx-background-color: #ffa000;
+}
+
+/* muteBox .box:hover - Stil für die muteBox (was passiert wenn man über die Check-Box hovert) (settings-popup.fxml) */
+.muteBox .box:hover {
+    -fx-background-color: #ff8c00;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0);
+}
+
+/* exitButton - Stil für alle exitButtons der Popups (settings-popup.fxml / highscores.fxml) */
+.exitButton {
+    -fx-background-color: #ffa000;
+    -fx-background-radius: 10;
+    -fx-border-color: black;
+    -fx-border-radius: 10;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+/* exitButton:hover - Stil für alle exitButtons der Popups (was passiert wenn man drüber hovert) (settings-popup.fxml / highscores.fxml) */
+.exitButton:hover {
+    -fx-background-color: #ff8c00;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-cursor: hand;
 }
