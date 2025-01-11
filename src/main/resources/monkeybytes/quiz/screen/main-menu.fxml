@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.MainMenuController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.screen.MainMenuController">
    <children>
       <Circle fx:id="whiteCircle" fill="WHITE" layoutX="400.0" layoutY="232.0" radius="218.0" stroke="BLACK" strokeType="INSIDE" />
       <ImageView fx:id="logoImage" fitHeight="276.0" fitWidth="339.0" layoutX="235.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../images/logo_idea_3.png" />
+            <Image url="@../../../image/logo_idea_3.png" />
          </image>
       </ImageView>
       <HBox fx:id="guiHBox" alignment="CENTER" layoutX="101.0" layoutY="445.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" spacing="15.0">
@@ -27,7 +27,7 @@
                <graphic>
                   <ImageView fx:id="settingsIcon" fitHeight="45.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../images/settings_symbol.png" />
+                        <Image url="@../../../image/settings_symbol.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -36,7 +36,7 @@
                <graphic>
                   <ImageView fx:id="highscoreIcon" fitHeight="45.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../images/highscore_symbol.png" />
+                        <Image url="@../../../image/highscore_symbol.png" />
                      </image>
                   </ImageView>
                </graphic>

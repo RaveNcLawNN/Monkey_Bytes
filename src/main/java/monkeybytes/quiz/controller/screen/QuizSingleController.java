@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.screen;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -15,6 +15,7 @@ import monkeybytes.quiz.game.Singleplayer;
 
 import java.util.List;
 
+// quiz-single-screen.fxml
 public class QuizSingleController {
     @FXML
     private AnchorPane rootPane;

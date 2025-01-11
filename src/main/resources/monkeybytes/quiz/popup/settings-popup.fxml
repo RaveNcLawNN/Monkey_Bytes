@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="root" stylesheets="@../../../styles/popup-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.SettingsController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="root" stylesheets="@../../../styles/popup-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.popup.SettingsController">
    <children>
       <Pane fx:id="settingsPane" layoutX="100.0" layoutY="40.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -21,7 +21,7 @@
             <Button fx:id="exitButton" layoutX="76.0" layoutY="209.0" mnemonicParsing="false" styleClass="exitButton" text="Exit" />
             <ImageView fx:id="volumeIcon" fitHeight="25.0" fitWidth="28.0" layoutX="-2.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../images/volume_symbol.png" />
+                  <Image url="@../../../image/volume_symbol.png" />
                </image>
             </ImageView>
             <Separator fx:id="settingSeparator" layoutX="-1.0" layoutY="46.0" prefHeight="44.0" prefWidth="200.0" styleClass="labelSeparator" />

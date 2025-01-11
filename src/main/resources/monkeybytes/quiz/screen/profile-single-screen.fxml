@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.ProfileSingleController">
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.screen.ProfileSingleController">
    <children>
       <Button fx:id="testButton" layoutX="297.0" layoutY="225.0" mnemonicParsing="false" prefHeight="151.0" prefWidth="206.0" text="TEST" />
    </children>

@@ -86,7 +86,7 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0);
 }
 
-/* exitButton - Stil für alle exitButtons der Popups (settings-popup.fxml / highscores.fxml) */
+/* exitButton - Stil für alle exitButtons der Popups (settings-popup.fxml / highscores-popup.fxml) */
 .exitButton {
     -fx-background-color: #ffa000;
     -fx-background-radius: 10;
@@ -98,7 +98,7 @@
     -fx-alignment: center;
 }
 
-/* exitButton:hover - Stil für alle exitButtons der Popups (was passiert wenn man drüber hovert) (settings-popup.fxml / highscores.fxml) */
+/* exitButton:hover - Stil für alle exitButtons der Popups (was passiert wenn man drüber hovert) (settings-popup.fxml / highscores-popup.fxml) */
 .exitButton:hover {
     -fx-background-color: #ff8c00;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);

@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.screen;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
+// main-menu.fxml
 public class MainMenuController {
 
     @FXML
@@ -42,7 +42,7 @@ public class MainMenuController {
     private void openModeSelectionScreen() {
         try {
             // lädt den mode-selection-screen
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/mode-selection-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/mode-selection-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet
@@ -57,7 +57,7 @@ public class MainMenuController {
     // wird aufgerufen wenn man auf rules drückt
     private void openRulesScreen() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/rules-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/rules-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet
@@ -72,7 +72,7 @@ public class MainMenuController {
     // wird aufgerufen wenn man auf settings drückt
     private void openSettingsPopUp() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popups/settings-popup.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popup/settings-popup.fxml"));
             Parent root = fxmlLoader.load();
 
             Stage settings = new Stage();
@@ -107,7 +107,7 @@ public class MainMenuController {
             Stage highscoreStage = new Stage();
 
             //Erstellt einen FXML Loader und lädt die Inhalte aus highscore.fxml:
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popups/highscores.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popup/highscores-popup.fxml"));
 
             //Erstellt eine neue Szene (== Container für Inhalt der Stage) basierend auf der dazugehörige Root Node (mit FXML Loader geladen):
             Scene highscoreScene = new Scene(fxmlLoader.load());

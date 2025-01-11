@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.screen;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+// rules-screen.fxml
 public class RulesController {
 
     @FXML
@@ -24,7 +25,7 @@ public class RulesController {
     // wird aufgerufen wenn man auf understood klickt
     private void returnToMainMenu() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/main-menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/main-menu.fxml"));
             Parent mainMenuRoot = fxmlLoader.load();
 
             Stage currentStage = (Stage) rootPane.getScene().getWindow();

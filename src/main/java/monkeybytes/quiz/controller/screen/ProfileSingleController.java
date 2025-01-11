@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.screen;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+// profile-single-screen.fxml
 public class ProfileSingleController {
     @FXML
     private AnchorPane rootPane;
@@ -23,7 +24,7 @@ public class ProfileSingleController {
     private void openSelectionScreen() {
         try {
             // lädt den selection difficulty topic screen (noch nicht fertig - leitet jetzt mal direkt zum quiz single screen weiter)
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/quiz-single-screen.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/quiz-single-screen.fxml"));
             Parent root = fxmlLoader.load();
 
             // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet

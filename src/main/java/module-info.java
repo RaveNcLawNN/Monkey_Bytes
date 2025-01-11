@@ -17,7 +17,9 @@ module monkeybytes.quiz {
     opens monkeybytes.quiz to javafx.fxml;
     exports monkeybytes.quiz.game;
     exports monkeybytes.quiz;
-    exports monkeybytes.quiz.controller;
-    opens monkeybytes.quiz.controller to javafx.fxml;
     opens monkeybytes.quiz.game to com.google.gson;
+    exports monkeybytes.quiz.controller.screen;
+    opens monkeybytes.quiz.controller.screen to javafx.fxml;
+    exports monkeybytes.quiz.controller.popup;
+    opens monkeybytes.quiz.controller.popup to javafx.fxml;
 }

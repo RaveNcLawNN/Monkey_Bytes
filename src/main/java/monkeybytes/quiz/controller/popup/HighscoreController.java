@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.popup;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +11,8 @@ import monkeybytes.quiz.game.PlayerDataManager;
 
 import java.util.List;
 
-public class Highscores {
+// highscores-popup.fxml
+public class HighscoreController {
 
     @FXML
     private TableView<Player> highscoreTable;

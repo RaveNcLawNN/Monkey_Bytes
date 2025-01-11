@@ -15,14 +15,14 @@ Dies ist die eigentliche Main, also mit Einbindung in die
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/monkeybytes/quiz/quiz-single-screen.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/monkeybytes/quiz/screens/main-menu.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/monkeybytes/quiz/mode-selection-screen.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/monkeybytes/quiz/popups/highscores.fxml"));
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/monkeybytes/quiz/screen/main-menu.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/monkeybytes/quiz/popups/highscores-popup.fxml"));
+
         Scene menu = new Scene(fxmlLoader.load(), 800, 600);
 
         // fenster icon hinzugefügt
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.jpg")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/image/icon.jpg")));
 
 
         stage.setTitle("Monkey Bytes");

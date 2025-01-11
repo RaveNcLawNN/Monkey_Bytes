@@ -9,15 +9,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="rootScore" stylesheets="@../../../styles/popup-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.Highscores">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="rootScore" stylesheets="@../../../styles/popup-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.popup.HighscoreController">
    <children>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundHighscores">
+      <VBox alignment="CENTER" layoutX="39.0" layoutY="33.0" prefHeight="400.0" prefWidth="600.0" styleClass="backgroundHighscores">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="settingsLabel" text="Highscores">
                <VBox.margin>
                   <Insets bottom="25.0" top="40.0" />
                </VBox.margin></Text>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="201.0" prefWidth="641.0">
                <children>
                   <TableView fx:id="highscoreTable" prefWidth="500.0" styleClass="highScoreTable">
                     <columns>

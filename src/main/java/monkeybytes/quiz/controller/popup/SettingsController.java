@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.popup;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -6,6 +6,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
+// settings-popup.fxml
 public class SettingsController {
     @FXML
     private Button exitButton;
