@@ -143,3 +143,15 @@
     -fx-border-radius: 10;
     -fx-background-radius: 10;
 }
+
+/* textField - Stil für Eingabefelder wie Profilerstellung (profile-single-screen.fxml) */
+.textField {
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 16px;
+    -fx-padding: 5 10;
+    -fx-alignment: center-left;
+    -fx-pref-width: 300; /* Gleiche Breite wie das Dropdown-Menü */
+}

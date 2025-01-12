@@ -7,16 +7,17 @@
     "name": "Player2",
     "score": 200
   },
+
   {
-    "name": "Alice",
-    "score": 150
+    "name": "David",
+    "score": 0
   },
   {
-    "name": "Bob",
-    "score": 600
+    "name": "Emanuel",
+    "score": 0
   },
   {
-    "name": "Player5",
+    "name": "Martin",
     "score": 0
   }
 ]
