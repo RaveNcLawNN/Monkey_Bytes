@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import monkeybytes.quiz.controller.screen.QuizSingleController;
 import monkeybytes.quiz.service.TriviaAPIService;
 
 import java.util.List;
