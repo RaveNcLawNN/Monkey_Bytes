@@ -1,4 +1,4 @@
-package monkeybytes.quiz.controller;
+package monkeybytes.quiz.controller.screen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import monkeybytes.quiz.controller.screen.SelectionDiffTopController;
 import monkeybytes.quiz.game.Player;
 
 import java.io.FileReader;
@@ -132,7 +133,7 @@ public class ProfileSingleController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/selection-difficulty-topic-screen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/selection-difficulty-topic-screen.fxml"));
             Parent root = loader.load();
 
             SelectionDiffTopController controller = loader.getController();

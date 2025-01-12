@@ -13,7 +13,7 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
     protected int[] playerScores; // speichert die Punktestände/den Punktestand des/der Spieler/s
     protected QuestionTimer questionTimer;
 
-    public GameLogic(List<Question> questions, int numberOfPlayers) {
+    public GameLogic(List<Question> questions, int numberOfPlayers, int timeLimitSeconds) {
         this.questions = questions;
         this.playerScores = new int[numberOfPlayers]; // initialisiert das playerScores-Array mit der Länge numberOfPlayers.
         this.questionTimer = new QuestionTimer(timeLimitSeconds);
