@@ -1,6 +1,6 @@
-/* root - Stil für das Root-Element (alle 800x600 Popups) */
+/* root - Stil für das Root-Element (alle 250x300 Popups) */
 .root {
-    -fx-pref-width: 400;
+    -fx-pref-width: 250;
     -fx-pref-height: 300;
     -fx-background-color: #ffeab3;
     -fx-background-radius: 35;

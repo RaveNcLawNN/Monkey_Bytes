@@ -2,13 +2,23 @@ package monkeybytes.quiz.controller.screen;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import monkeybytes.quiz.controller.popup.PauseController;
 import monkeybytes.quiz.game.Question;
 import monkeybytes.quiz.game.QuestionTimer;
 import monkeybytes.quiz.game.Singleplayer;
@@ -57,6 +67,7 @@ public class QuizSingleController {
     private Singleplayer game;
     private QuestionTimer questionTimer;
     private volatile boolean stopTimerThread = false;
+    private int remainingTime = 30;
 
     private TriviaAPIService triviaAPIService = new TriviaAPIService();
 
@@ -67,7 +78,27 @@ public class QuizSingleController {
         optionBButton.setOnAction(event -> handleAnswer(1));
         optionCButton.setOnAction(event -> handleAnswer(2));
         optionDButton.setOnAction(event -> handleAnswer(3));
+
+        // pause popup wird angezeigt wenn man esc drückt
+        rootPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventHandler(KeyEvent.KEY_PRESSED, escHandler);
+
+                newScene.windowProperty().addListener((windowObservable, oldWindow, newWindow) -> {
+                    if (newWindow == null) {
+                        newScene.removeEventHandler(KeyEvent.KEY_PRESSED, escHandler);
+                    }
+                });
+            }
+        });
     }
+
+    // wenn man auf esc drückt, wird pause popup angezeigt
+    private final EventHandler<KeyEvent> escHandler = event -> {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            showPausePopup();
+        }
+    };
 
     /**
      * Setzt die API-Parameter für die aktuelle Spielsitzung.
@@ -194,7 +225,7 @@ public class QuizSingleController {
      * Startet den Timer für die aktuelle Frage.
      */
     private void startTimer() {
-        questionTimer = new QuestionTimer(30);
+        questionTimer = new QuestionTimer(remainingTime);
         questionTimer.startTimer();
         stopTimerThread = false;
 
@@ -219,6 +250,7 @@ public class QuizSingleController {
      */
     private void stopTimer() {
         if (questionTimer != null) {
+            remainingTime = questionTimer.getRemainingTime();
             questionTimer.stopTimer();
         }
         stopTimerThread = true;
@@ -247,6 +279,42 @@ public class QuizSingleController {
             button.setStyle(null);
         }
     }
+
+    private void showPausePopup() {
+        try {
+            if (rootPane.getScene() == null || rootPane.getScene().getWindow() == null) {
+                return;
+            }
+            stopTimer();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popup/pause-popup.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage mainStage = (Stage) rootPane.getScene().getWindow();
+
+            PauseController pauseController = fxmlLoader.getController();
+            pauseController.setMainStage(mainStage);
+
+            Stage pauseStage = new Stage();
+            pauseStage.initStyle(StageStyle.UNDECORATED);
+            pauseStage.initStyle(StageStyle.TRANSPARENT);
+            pauseStage.initModality(Modality.APPLICATION_MODAL);
+            pauseStage.initOwner(mainStage);
+
+            pauseStage.setWidth(250);
+            pauseStage.setHeight(300);
+
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            pauseStage.setScene(scene);
+            pauseStage.showAndWait();
+
+            startTimer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

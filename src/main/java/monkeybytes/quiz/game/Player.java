@@ -13,7 +13,7 @@ public class Player {
     }
 
     private boolean validName (String name) {
-        return name != null && name.matches("[a.zA-Z0-9]{3,15}");
+        return name != null && name.matches("[a-zA-Z0-9]{3,15}");
     }
 
     public String getName() {

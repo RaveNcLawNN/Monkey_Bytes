@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="monkeybytes.quiz.controller.popup.PauseController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="300.0" stylesheets="@../../../styles/popup-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.popup.PauseController">
+   <children>
+      <Pane fx:id="pausePane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <children>
+            <Separator fx:id="headerSeparator" layoutX="-1.0" layoutY="46.0" prefHeight="44.0" prefWidth="200.0" styleClass="labelSeparator" />
+            <Label fx:id="headerLabel" alignment="CENTER" layoutX="18.0" layoutY="14.0" prefWidth="160.0" styleClass="settingsLabel" text="Pause" />
+            <Button fx:id="backToGameButton" layoutX="18.0" layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" styleClass="exitButton" text="Back To Game" />
+            <Button fx:id="backToMainMenuButton" layoutX="18.0" layoutY="120.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" styleClass="exitButton" text="Back To Main Menu" />
+            <Button fx:id="settingsButton" layoutX="18.0" layoutY="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" styleClass="exitButton" text="Settings" />
+         </children>
+      </Pane>
+   </children>
 </AnchorPane>
