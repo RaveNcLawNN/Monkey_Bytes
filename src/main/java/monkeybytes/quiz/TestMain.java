@@ -17,7 +17,7 @@ public class TestMain {
 
         // Test 1: Add a new player
         System.out.println("Adding new player...");
-        manager.updatePlayerInformation("Alice", 100);
+        manager.updatePlayerInformation("Alice", 105);
         System.out.println("Player added.");
 
         // Test 2: Update the same player's score (higher score)

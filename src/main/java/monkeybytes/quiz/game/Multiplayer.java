@@ -11,7 +11,7 @@ public class Multiplayer extends GameLogic {
     public Multiplayer (List<Question> questions) {
         // "super" wird verwendet, um Konstruktoren und Methoden aus der Elternklasse ("Superklasse") aufzurufen.
         // hier wird der GameLogic-Konstruktor aufgerufen, mit numberOfPlayers = 2.
-        super (questions, 2);
+        super (questions, 2, 15);
     }
 
     public void checkAnswer (int selectedOptionIndex) {

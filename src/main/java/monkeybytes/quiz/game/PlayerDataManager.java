@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
 
 public class PlayerDataManager {
@@ -43,6 +44,8 @@ public class PlayerDataManager {
 
     // Speichert Player Data in die JSON-Datei
     private void savePlayerData() {
+        //Sortiert Players nach Score (absteigend):
+        players.sort(Comparator.comparingInt(Player::getScore).reversed());
         //Öffnet und schreibt in die Datei aus fileName.
         try (FileWriter writer = new FileWriter(fileName)) {
             //Übernimmt die Liste an Player Objekten und den Writer, der die Daten direkt ins JSON File schreibt.
