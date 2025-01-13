@@ -11,7 +11,7 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
     protected List<Question> questions; // Liste der Fragen, die später dem Konstruktor von der API übergeben wird.
     protected int currentQuestionIndex = 0;
     protected int[] playerScores; // speichert die Punktestände/den Punktestand des/der Spieler/s
-    protected QuestionTimer questionTimer;
+    public QuestionTimer questionTimer;
 
     public GameLogic(List<Question> questions, int numberOfPlayers, int timeLimitSeconds) {
         this.questions = questions;
@@ -42,6 +42,15 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
         currentQuestionIndex++;
     }
 
+    // Geht zur nächsten Frage, falls vorhanden (für Multiplayer)
+    public boolean moveToNextQuestion() {
+        if (currentQuestionIndex < questions.size() - 1) {
+            currentQuestionIndex++;
+            return true;
+        }
+        return false; // Keine weiteren Fragen verfügbar
+    }
+
     // wenn der Index der aktuellen Frage größer/gleich der Anzahl der Fragen ist, gibt es keine weiteren Fragen und isGameOver() gibt true zurück.
     public boolean isGameOver() {
         return currentQuestionIndex >= questions.size();
@@ -60,6 +69,10 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
     //getter-Methode, die den aktuellen Question Index zurückgibt.
     public int getCurrentQuestionIndex() {
         return currentQuestionIndex;
+    }
+
+    public void setCurrentQuestionIndex(int index) {
+        currentQuestionIndex = index;
     }
 
     //gibt die Gesamtanzahl der Fragen zurück.

@@ -137,7 +137,7 @@ public class ProfileSingleController {
             Parent root = loader.load();
 
             SelectionDiffTopController controller = loader.getController();
-            controller.setProfile(selectedProfile);
+            controller.setProfileAndMode(selectedProfile, false);
 
             Stage stage = (Stage) profileComboBox.getScene().getWindow();
             stage.getScene().setRoot(root);

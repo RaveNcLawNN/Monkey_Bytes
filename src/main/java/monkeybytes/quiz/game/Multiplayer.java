@@ -31,6 +31,17 @@ public class Multiplayer extends GameLogic {
         }
     }
 
+    public List<Player> getPlayers() {
+        return List.of(
+                new Player("Alice", 0),
+                new Player("Bob", 0)
+        );
+    }
+
+    public Player getCurrentPlayerProfile() {
+        return getPlayers().get(getCurrentPlayer());
+    }
+
     // gibt die Punktestände der Spieler zurück, z.B. für den Endscreen.
     public int [] getScores() {
         return playerScores;
