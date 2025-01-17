@@ -7,34 +7,61 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600" prefWidth="800" styleClass="root" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.screen.QuizMultiController">
+<AnchorPane fx:id="rootPane" prefHeight="600" prefWidth="800" styleClass="root" stylesheets="@../../../styles/screen-styles.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="monkeybytes.quiz.controller.screen.QuizMultiController">
     <children>
         <!-- Header für Spielerinformationen -->
-        <Pane fx:id="headerPane" layoutX="16.0" layoutY="14.0" prefHeight="100.0" prefWidth="770.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+        <Pane fx:id="headerPane" layoutX="16.0" layoutY="14.0" prefHeight="100.0" prefWidth="770.0"
+              AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <children>
-                <Label fx:id="player1ScoreLabel" layoutY="10.0" styleClass="headerLabel" text="Player 1: 0 Points" />
-                <Label fx:id="player2ScoreLabel" layoutY="40.0" styleClass="headerLabel" text="Player 2: 0 Points" />
+                <Label fx:id="player1ScoreLabel" layoutY="10.0" styleClass="headerLabel" text=""/>
+                <Label fx:id="player2ScoreLabel" layoutY="40.0" styleClass="headerLabel" text=""/>
                 <Label fx:id="timerLabel" layoutX="714.0" layoutY="45.0" styleClass="headerLabel" text="⏳30s" />
-                <Label fx:id="currentPlayerLabel" layoutX="287.0" layoutY="45.0" styleClass="headerLabel" text="Current Player: Player 1" />
+                <Label fx:id="currentPlayerLabel" layoutX="287.0" layoutY="45.0" styleClass="headerLabel" text="" />
             </children>
         </Pane>
 
         <!-- Fragebereich -->
-        <Pane fx:id="questionPane" layoutX="150.0" layoutY="147.0" prefHeight="415.0" prefWidth="500.0">
+        <Pane fx:id="questionPane" layoutX="150.0" layoutY="147.0" maxHeight="-Infinity" maxWidth="-Infinity"
+              minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="500.0">
             <children>
-                <Label fx:id="questionLabel" layoutX="0.0" layoutY="0.0" prefHeight="100.0" prefWidth="600.0" styleClass="questionLabel" text="questionLabel" alignment="CENTER" textAlignment="CENTER" wrapText="true" />
-                <VBox fx:id="answersVBox" alignment="TOP_CENTER" layoutX="85.0" layoutY="105.0" prefHeight="300.0" prefWidth="400.0" spacing="25.0">
+                <Label fx:id="questionLabel" layoutX="-100.0" prefHeight="100.0" prefWidth="700.0"
+                       styleClass="questionLabel" text="questionLabel" textAlignment="CENTER" wrapText="true" />
+                <VBox fx:id="answersVBox" alignment="TOP_CENTER" layoutX="85.0" layoutY="105.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                       prefHeight="300.0" prefWidth="400.0" spacing="25.0">
+
                     <children>
-                        <Button fx:id="optionAButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option A" alignment="CENTER" textAlignment="CENTER" wrapText="true" />
-                        <Button fx:id="optionBButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option B" alignment="CENTER" textAlignment="CENTER" wrapText="true" />
-                        <Button fx:id="optionCButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option C" alignment="CENTER" textAlignment="CENTER" wrapText="true" />
-                        <Button fx:id="optionDButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option D" alignment="CENTER" textAlignment="CENTER" wrapText="true" />
+                        <Button fx:id="optionAButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option A" />
+                        <Button fx:id="optionBButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option B" />
+                        <Button fx:id="optionCButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option C" />
+                        <Button fx:id="optionDButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option D" />
+                    </children>
+                </VBox>
+                <VBox fx:id="optionsVBox" layoutX="15.0" layoutY="105.0" prefHeight="300.0" prefWidth="70.0" spacing="25.0"
+                      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                    <children>
+                        <Label fx:id="labelA" prefHeight="50.0" prefWidth="50.0" styleClass="answerLabel" text="A" />
+                        <Label fx:id="labelB" prefHeight="50.0" prefWidth="50.0" styleClass="answerLabel" text="B" />
+                        <Label fx:id="labelC" prefHeight="50.0" prefWidth="50.0" styleClass="answerLabel" text="C" />
+                        <Label fx:id="labelD" prefHeight="50.0" prefWidth="50.0" styleClass="answerLabel" text="D" />
                     </children>
                 </VBox>
             </children>
         </Pane>
 
         <!-- Trennlinie zwischen Header und Frage -->
-        <Pane fx:id="questionSeparator" layoutX="15.0" layoutY="115.0" prefHeight="10.0" prefWidth="770.0" styleClass="questionSeparator" />
+        <Pane fx:id="questionSeparator" layoutX="15.0" layoutY="115.0" prefHeight="10.0" prefWidth="770.0"
+              styleClass="questionSeparator" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="115.0" />
     </children>
+    <!-- Spielerwechsel-Overlay -->
+    <VBox fx:id="playerSwitchOverlay" visible="false" alignment="CENTER"
+          style="-fx-background-color: #ffeab3;"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <children>
+            <Label fx:id="switchLabel" text="It's Player 2's turn!" styleClass="headerLabel" />
+            <Button fx:id="readyButton" text="Ready" onAction="#onReadyButtonClicked" styleClass="guiButton" />
+        </children>
+    </VBox>
+
 </AnchorPane>

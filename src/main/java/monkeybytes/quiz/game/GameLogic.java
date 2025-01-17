@@ -37,17 +37,22 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
     public void checkAnswer(int selectedOptionIndex, int playerIndex) {
         Question currentQuestion = getCurrentQuestion();
         if (currentQuestion != null && currentQuestion.getCorrectOptionIndex() == selectedOptionIndex) { // falls der Index der korrekten Antwort gleich dem Index der ausgewählten Antwort ist, gibt es Punkte.
-            playerScores[playerIndex] += calculateScore(100);
+            int scoreToAdd = calculateScore(100);
+            playerScores[playerIndex] += scoreToAdd;
         }
         currentQuestionIndex++;
     }
 
     // Geht zur nächsten Frage, falls vorhanden (für Multiplayer)
     public boolean moveToNextQuestion() {
+        System.out.println("DEBUG: GameLogic.moveToNextQuestion called. Current Index: " + currentQuestionIndex);
+
         if (currentQuestionIndex < questions.size() - 1) {
             currentQuestionIndex++;
+            System.out.println("DEBUG: Incremented Question Index to " + currentQuestionIndex);
             return true;
         }
+        System.out.println("DEBUG: No more questions available.");
         return false; // Keine weiteren Fragen verfügbar
     }
 
@@ -61,9 +66,8 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
         return playerScores;
     }
 
-    //getter-Methode, die den aktuellen Spieler zurückgibt.
     public int getCurrentPlayer() {
-        return currentQuestionIndex % playerScores.length; // durch Modulo wird sichergestellt, dass sich die Spieler im Multiplayer immer abwechseln.
+        return currentQuestionIndex % playerScores.length;
     }
 
     //getter-Methode, die den aktuellen Question Index zurückgibt.

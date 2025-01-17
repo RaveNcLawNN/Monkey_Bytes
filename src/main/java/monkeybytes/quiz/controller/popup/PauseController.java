@@ -44,6 +44,10 @@ public class PauseController {
     }
 
     private void backToMainMenu() {
+        if (mainStage == null) {
+            System.err.println("Main stage is not set!");
+            return;
+        }
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/main-menu.fxml"));
             Parent mainMenu = fxmlLoader.load();
@@ -71,7 +75,5 @@ public class PauseController {
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
     }
-
-
 
 }

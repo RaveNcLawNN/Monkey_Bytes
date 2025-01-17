@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import monkeybytes.quiz.controller.popup.PauseController;
+import monkeybytes.quiz.game.PlayerDataManager;
 import monkeybytes.quiz.game.Question;
 import monkeybytes.quiz.game.QuestionTimer;
 import monkeybytes.quiz.game.Singleplayer;
@@ -32,37 +33,16 @@ public class QuizSingleController {
     private AnchorPane rootPane;
 
     @FXML
-    private Pane headerPane;
+    private Pane headerPane, questionPane;
 
     @FXML
-    private Label questionCounterLabel;
-
-    @FXML
-    private Label timerLabel;
-
-    @FXML
-    private Label currentPlayerLabel;
-
-    @FXML
-    private Pane questionPane;
-
-    @FXML
-    private Label questionLabel;
+    private Label questionCounterLabel, timerLabel, currentPlayerLabel, questionLabel;
 
     @FXML
     private VBox optionsVBox;
 
     @FXML
-    private Button optionAButton;
-
-    @FXML
-    private Button optionBButton;
-
-    @FXML
-    private Button optionCButton;
-
-    @FXML
-    private Button optionDButton;
+    private Button optionAButton, optionBButton, optionCButton, optionDButton;
 
     private Singleplayer game;
     private QuestionTimer questionTimer;
@@ -74,10 +54,10 @@ public class QuizSingleController {
     @FXML
     public void initialize() {
         // Event-Handler für Antwort-Buttons
-        optionAButton.setOnAction(event -> handleAnswer(0));
-        optionBButton.setOnAction(event -> handleAnswer(1));
-        optionCButton.setOnAction(event -> handleAnswer(2));
-        optionDButton.setOnAction(event -> handleAnswer(3));
+        optionAButton.setOnAction(event -> handleAnswerSingle(0));
+        optionBButton.setOnAction(event -> handleAnswerSingle(1));
+        optionCButton.setOnAction(event -> handleAnswerSingle(2));
+        optionDButton.setOnAction(event -> handleAnswerSingle(3));
 
         // pause popup wird angezeigt wenn man esc drückt
         rootPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
@@ -150,7 +130,8 @@ public class QuizSingleController {
             // Fragezähler aktualisieren
             questionCounterLabel.setText((game.getCurrentQuestionIndex() + 1) + " of " + game.getQuestions().size() + " Questions");
 
-            // Timer starten
+            remainingTime = 30;
+            stopTimer();
             startTimer();
         } else {
             // Wenn keine weiteren Fragen vorhanden sind
@@ -162,15 +143,18 @@ public class QuizSingleController {
      * Zeigt die Ergebnisse des Spiels an.
      */
     private void showResults() {
-        System.out.println("Spiel beendet! Punktestand: " + game.getScore());
-        questionLabel.setText("Quiz beendet! Dein Punktestand: " + game.getScore());
-    }
+
+            PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
+            dataManager.updatePlayerInformation(currentPlayerLabel.getText().replace("Player: ", ""), game.getScore());
+
+            questionLabel.setText("Quiz finished! Your score: " + game.getScore());
+        }
 
     /**
      * Handhabt die Auswahl einer Antwort.
      * @param answerIndex Index der ausgewählten Antwort.
      */
-    private void handleAnswer(int answerIndex) {
+    private void handleAnswerSingle(int answerIndex) {
         Question currentQuestion = game.getCurrentQuestion();
         if (currentQuestion != null) {
             int correctIndex = currentQuestion.getCorrectOptionIndex();
@@ -220,7 +204,6 @@ public class QuizSingleController {
         }
     }
 
-
     /**
      * Startet den Timer für die aktuelle Frage.
      */
@@ -240,7 +223,7 @@ public class QuizSingleController {
             }
 
             if (!stopTimerThread && questionTimer.getTimerUp()) {
-                Platform.runLater(() -> handleAnswer(-1));
+                Platform.runLater(() -> handleAnswerSingle(-1));
             }
         }).start();
     }
@@ -250,7 +233,7 @@ public class QuizSingleController {
      */
     private void stopTimer() {
         if (questionTimer != null) {
-            remainingTime = questionTimer.getRemainingTime();
+//            remainingTime = questionTimer.getRemainingTime();
             questionTimer.stopTimer();
         }
         stopTimerThread = true;
@@ -314,6 +297,5 @@ public class QuizSingleController {
             e.printStackTrace();
         }
     }
-
 }
 

@@ -63,14 +63,9 @@ public class PlayerDataManager {
 
         boolean playerFound = false;
 
-        //Durchläuft jedes Player Objekt in der "players" Liste und prüft, ob Spieler existiert.
         for (Player player : players) {
-            //Vergleicht Objekte mit übergebenem playerName (z.B. aus GameLogic?)
             if (player.getName().equals(playerName)) {
-                //Wenn ein Spieler gefunden wurde, und der neue Score höher ist, wird der Score aktualisiert.
-                if (player.getScore() <= newScore) {
-                    player.setScore(newScore);
-                }
+                player.setScore(newScore); // Setze immer den neuen Score
                 playerFound = true;
                 break;
             }

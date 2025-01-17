@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /*
-Dies ist die eigentliche Main, also mit Einbindung in die
+Dies ist die eigentliche Main, also mit Einbindung in die GUI
  */
 
 public class Main extends Application {

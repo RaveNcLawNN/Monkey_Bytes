@@ -9,7 +9,7 @@ public class Player {
             throw new IllegalArgumentException("Name not allowed");
         }
         this.name = name;
-        this.score = 0;
+        this.score = score;
     }
 
     private boolean validName (String name) {
@@ -38,6 +38,16 @@ public class Player {
 
     public void resetScore() {
         this.score = 0;
+    }
+
+    private int lastSelectedOption = -1; // Speichert die letzte gewählte Antwort
+
+    public int getLastSelectedOption() {
+        return lastSelectedOption;
+    }
+
+    public void setLastSelectedOption(int lastSelectedOption) {
+        this.lastSelectedOption = lastSelectedOption;
     }
 
     @Override

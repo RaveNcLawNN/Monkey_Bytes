@@ -1,16 +1,23 @@
 package monkeybytes.quiz.controller.screen;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import monkeybytes.quiz.game.Multiplayer;
-import monkeybytes.quiz.game.Player;
-import monkeybytes.quiz.game.Question;
-import monkeybytes.quiz.game.QuestionTimer;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import monkeybytes.quiz.controller.popup.PauseController;
+import monkeybytes.quiz.game.*;
 import monkeybytes.quiz.service.TriviaAPIService;
 
 import java.util.List;
@@ -18,171 +25,246 @@ import java.util.List;
 public class QuizMultiController {
 
     @FXML
+    private VBox optionsVBox, answersVBox, playerSwitchOverlay;
+    @FXML
     private AnchorPane rootPane;
     @FXML
-    private Pane headerPane, questionPane, questionSeparator;
+    private Pane headerPane;
     @FXML
-    private Label questionLabel, currentPlayerLabel, player1ScoreLabel, player2ScoreLabel, timerLabel;
+    private Label questionLabel, currentPlayerLabel, player1ScoreLabel, player2ScoreLabel, timerLabel, switchLabel;
     @FXML
-    private VBox answersVBox, optionsVBox;
-    @FXML
-    private Button optionAButton, optionBButton, optionCButton, optionDButton;
+    private Button optionAButton, optionBButton, optionCButton, optionDButton, readyButton;
 
     private Multiplayer game;
     private QuestionTimer questionTimer;
-    private boolean isSecondPlayerTurn = false; // Wechselt zwischen den Spielern
+    private volatile boolean stopTimerThread = false;
+    private boolean isAnswerSelected = false;
+    private List<Button> answerButtons;
     private int remainingTime = 30;
-    private TriviaAPIService triviaAPIService = new TriviaAPIService();
 
     @FXML
     public void initialize() {
-        // Antwort-Buttons mit Event-Handlern verknüpfen
-        optionAButton.setOnAction(event -> handleAnswer(0));
-        optionBButton.setOnAction(event -> handleAnswer(1));
-        optionCButton.setOnAction(event -> handleAnswer(2));
-        optionDButton.setOnAction(event -> handleAnswer(3));
+        // Buttons in eine Liste übernehmen
+        answerButtons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
+
+        // Ereignisse für Antwort-Buttons einrichten
+        optionAButton.setOnAction(event -> handleAnswerMulti(0));
+        optionBButton.setOnAction(event -> handleAnswerMulti(1));
+        optionCButton.setOnAction(event -> handleAnswerMulti(2));
+        optionDButton.setOnAction(event -> handleAnswerMulti(3));
+
+        // pause popup wird angezeigt wenn man esc drückt
+        rootPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventHandler(KeyEvent.KEY_PRESSED, escHandler);
+
+                newScene.windowProperty().addListener((windowObservable, oldWindow, newWindow) -> {
+                    if (newWindow == null) {
+                        newScene.removeEventHandler(KeyEvent.KEY_PRESSED, escHandler);
+                    }
+                });
+            }
+        });
     }
 
-    /**
-     * Setzt die API-Parameter und lädt die Fragen.
-     */
+    // wenn man auf esc drückt, wird pause popup angezeigt
+    private final EventHandler<KeyEvent> escHandler = event -> {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            showPausePopup();
+        }
+    };
+
+
     public void setApiParameters(String category, String difficulty, String profile1, String profile2) {
         try {
-            // Kategorien-ID und Fragen von der API laden
+            // Trivia-Daten von der API abrufen
+            TriviaAPIService triviaAPIService = new TriviaAPIService();
             String categoryId = triviaAPIService.getFixedCategoryId(category);
             List<Question> questions = triviaAPIService.fetchUniqueQuestions(10, categoryId, difficulty);
 
-            // Multiplayer-Spiel initialisieren
-            game = new Multiplayer(questions);
+            // Spielerprofil-Daten laden
+            PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
+            Player player1 = dataManager.getPlayers().stream()
+                    .filter(player -> player.getName().equals(profile1))
+                    .findFirst()
+                    .orElse(new Player(profile1, 0));
+            Player player2 = dataManager.getPlayers().stream()
+                    .filter(player -> player.getName().equals(profile2))
+                    .findFirst()
+                    .orElse(new Player(profile2, 0));
 
-            // Spielerprofile setzen
-            List<Player> players = game.getPlayers();
-            players.get(0).setName(profile1);
-            players.get(1).setName(profile2);
+            // Multiplayer-Spiel erstellen
+            game = new Multiplayer(questions, List.of(player1, player2));
 
+            // Spiel vorbereiten
             updatePlayerDisplay();
-            loadQuestion();
+            showPlayerSwitchScreen(); // Spiel startet (Spielerwechsel anzeigen)
         } catch (Exception e) {
             e.printStackTrace();
-            questionLabel.setText("Fehler beim Laden der Fragen. Bitte versuche es erneut.");
+            questionLabel.setText("Could not fetch questions. Please try again.");
         }
     }
 
-    /**
-     * Lädt die aktuelle Frage und zeigt sie an.
-     */
     private void loadQuestion() {
-        // Hol die aktuelle Frage
         Question currentQuestion = game.getCurrentQuestion();
+
+        System.out.println("DEBUG: Current Question Index: " + game.getCurrentQuestionIndex());
+        System.out.println("DEBUG: Current Question: " + (currentQuestion != null ? currentQuestion.getQuestionText() : "No more questions"));
+
         if (currentQuestion != null) {
-            // Stile der Buttons zurücksetzen
-            resetButtonStyles();
+            resetButtonStyles(); // Buttons vollständig zurücksetzen
+            isAnswerSelected = false; // Spielzustand resetten
+            setAnswerButtonsDisabled(false); // Antworten wieder aktivieren
 
-            // Setze die Frage
+            // Frage und Antwortoptionen setzen
             questionLabel.setText(currentQuestion.getQuestionText());
-
-            // Setze die Antwortmöglichkeiten
             List<String> options = currentQuestion.getOptions();
-            optionAButton.setText(options.get(0));
-            optionBButton.setText(options.get(1));
-            optionCButton.setText(options.get(2));
-            optionDButton.setText(options.get(3));
 
-            // Starte den Timer
-            startTimer();
+            for (int i = 0; i < options.size(); i++) {
+                Button btn = answerButtons.get(i);
+                btn.setText(options.get(i));
+                btn.setStyle(""); // Sicherstellen, dass Styles zurückgesetzt werden
+            }
 
-            // Debug-Ausgabe, um sicherzustellen, dass die richtigen Werte geladen werden
-            System.out.println("Frage geladen: " + currentQuestion.getQuestionText());
-            System.out.println("Antwortmöglichkeiten: " + options);
+            startTimer(); // Timer neu starten
         } else {
-            // Falls keine Fragen mehr vorhanden sind
+            showResults(); // Alle Fragen beendet
+        }
+    }
+
+    private void handleAnswerMulti(int selectedOptionIndex) {
+        if (isAnswerSelected || game.getCurrentQuestion() == null) {
+            System.out.println("DEBUG: Answer already selected or no question available.");
+            return;
+        }
+
+        isAnswerSelected = true;
+        int currentPlayerIndex = game.getCurrentPlayer();
+
+        // Antwort des Spielers registrieren
+        game.checkAnswer(selectedOptionIndex, currentPlayerIndex);
+        System.out.println("DEBUG: Player " + currentPlayerIndex + " answered. Question Index: " + game.getCurrentQuestionIndex());
+
+        // Wenn ALLE Spieler geantwortet haben, wird die Runde beendet.
+        if (currentPlayerIndex == game.getPlayers().size() - 1) {
+            System.out.println("DEBUG: End of round. Processing...");
+            processEndOfRound();
+        } else {
+            // Zum nächsten Spieler wechseln (Zwischenscreen anzeigen)
+            System.out.println("DEBUG: Switching to the next player.");
+            game.nextPlayer();
+            showPlayerSwitchScreen();
+        }
+    }
+
+    private void processEndOfRound() {
+        Question currentQuestion = game.getCurrentQuestion();
+        System.out.println("DEBUG: End of Round.");
+        System.out.println("DEBUG: Current Question Index BEFORE moveToNextQuestion: " + game.getCurrentQuestionIndex());
+
+        if (currentQuestion == null) {
+            System.out.println("DEBUG: No more questions.");
+            moveToNextQuestion(); // Sicherstellen, dass fortgefahren wird
+            return;
+        }
+
+        // Richtige/falsche Antworten markieren
+        markAnswers(currentQuestion.getCorrectOptionIndex());
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000); // 2-sekündige Pause
+                Platform.runLater(() -> {
+                    updatePlayerDisplay();
+                    saveScores();// Punkte aktualisieren
+                    if (game.moveToNextQuestion()) { // Fortschritt zur nächsten Frage
+                        System.out.println("DEBUG: Current Question Index AFTER moveToNextQuestion: " + game.getCurrentQuestionIndex());
+                        ((Multiplayer) game).resetToFirstPlayer();
+                        showPlayerSwitchScreen();
+                    } else {
+                        System.out.println("DEBUG: Game Over!");
+                        showResults(); // Spiel enden
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void moveToNextQuestion() {
+        System.out.println("DEBUG: moveToNextQuestion (Controller) called."); // Debugging
+
+        if (game.moveToNextQuestion()) {
+            System.out.println("DEBUG: Moving to next question."); // Debugging
+            showPlayerSwitchScreen(); // Vor der nächsten Frage Zwischenscreen anzeigen
+        } else {
+            System.out.println("DEBUG: No more questions available. Showing results."); // Debugging
             showResults();
         }
     }
 
+    @FXML
+    public void onReadyButtonClicked() {
+        playerSwitchOverlay.setVisible(false); // Overlay ausblenden
+        setAnswerButtonsDisabled(false); // Buttons aktivieren
+        resetTimer(); // Timer resetten
+        isAnswerSelected = false; // Ermöglicht eine neue Auswahl
 
-    /**
-     * Behandelt die Antwort eines Spielers.
-     */
-    private void handleAnswer(int selectedOptionIndex) {
-        Question currentQuestion = game.getCurrentQuestion();
-        if (currentQuestion != null) {
-            int correctIndex = currentQuestion.getCorrectOptionIndex();
-            markAnswers(correctIndex, selectedOptionIndex);
-
-            // Antwort prüfen und Punktestand aktualisieren
-            game.checkAnswer(selectedOptionIndex);
-
-            if (!isSecondPlayerTurn) {
-                isSecondPlayerTurn = true; // Nächster Spieler ist an der Reihe
-                updatePlayerDisplay();
-                resetTimer();
-            } else {
-                isSecondPlayerTurn = false; // Zurück zum ersten Spieler
-                moveToNextQuestion();
-            }
-        }
+        loadQuestion();
+        saveScores();
     }
 
-    /**
-     * Bewegt das Spiel zur nächsten Frage.
-     */
-    private void moveToNextQuestion() {
-        game.setCurrentQuestionIndex(game.getCurrentQuestionIndex() + 1); // Frageindex erhöhen
-        loadQuestion(); // Neue Frage laden
+    private void showPlayerSwitchScreen() {
+        int currentPlayerIndex = game.getCurrentPlayer();
+        Player nextPlayer = game.getPlayers().get(currentPlayerIndex);
+
+        switchLabel.setText(nextPlayer.getName() + "'s turn!");
+
+        playerSwitchOverlay.setVisible(true);
+        playerSwitchOverlay.toFront(); // Überlagert die UI
+        setAnswerButtonsDisabled(true);
+
+        isAnswerSelected = false; // Zurücksetzen, um die neue Eingabe zuzulassen
     }
 
-    /**
-     * Zeigt die Ergebnisse an, wenn das Spiel vorbei ist.
-     */
-    private void showResults() {
-        stopTimer();
-        String winnerMessage = game.getWinner();
-        questionLabel.setText("🎉 " + winnerMessage);
-
-        // Buttons deaktivieren
-        optionAButton.setDisable(true);
-        optionBButton.setDisable(true);
-        optionCButton.setDisable(true);
-        optionDButton.setDisable(true);
-    }
-
-    /**
-     * Zeigt die richtigen und falschen Antworten an.
-     */
-    private void markAnswers(int correctIndex, int selectedIndex) {
-        List<Button> buttons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
-        for (int i = 0; i < buttons.size(); i++) {
-            Button button = buttons.get(i);
-            if (i == correctIndex) {
-                button.setStyle("-fx-background-color: #16ad09; -fx-text-fill: white;"); // Grün
-            } else if (i == selectedIndex && i != correctIndex) {
-                button.setStyle("-fx-background-color: red; -fx-text-fill: white;"); // Rot
-            }
-        }
-    }
-
-    /**
-     * Aktualisiert die Anzeige des aktuellen Spielers.
-     */
     private void updatePlayerDisplay() {
-        Player currentPlayer = game.getCurrentPlayerProfile();
+        Player currentPlayer = game.getPlayers().get(game.getCurrentPlayer());
+
         currentPlayerLabel.setText("Current Player: " + currentPlayer.getName());
 
-        // Punktestände aktualisieren
         List<Player> players = game.getPlayers();
         player1ScoreLabel.setText(players.get(0).getName() + ": " + players.get(0).getScore() + " Points");
         player2ScoreLabel.setText(players.get(1).getName() + ": " + players.get(1).getScore() + " Points");
     }
 
-    /**
-     * Setzt die Stile der Antwort-Buttons zurück.
-     */
-    private void resetButtonStyles() {
-        List<Button> buttons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
-        for (Button button : buttons) {
-            button.setStyle(null);
+    private void markAnswers(int correctIndex) {
+        for (int i = 0; i < answerButtons.size(); i++) {
+            Button button = answerButtons.get(i);
+            if (i == correctIndex) {
+                button.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+            } else {
+                button.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+            }
         }
+    }
+
+    private void setAnswerButtonsDisabled(boolean disabled) {
+        answerButtons.forEach(button -> button.setDisable(disabled));
+    }
+
+    private void resetButtonStyles() {
+        answerButtons.forEach(button -> button.setStyle(null));
+    }
+
+    private void saveScores() {
+        PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
+        game.getPlayers().forEach(player -> dataManager.updatePlayerInformation(player.getName(), player.getScore()));
+    }
+
+    private void showResults() {
+        questionLabel.setText("🎉 " + game.getWinner());
+        setAnswerButtonsDisabled(true);
     }
 
     /**
@@ -191,9 +273,10 @@ public class QuizMultiController {
     private void startTimer() {
         questionTimer = new QuestionTimer(remainingTime);
         questionTimer.startTimer();
+        stopTimerThread = false;
 
         new Thread(() -> {
-            while (!questionTimer.getTimerUp()) {
+            while (!stopTimerThread && !questionTimer.getTimerUp()) {
                 try {
                     Thread.sleep(500);
                     Platform.runLater(this::updateTimerLabel);
@@ -202,8 +285,8 @@ public class QuizMultiController {
                 }
             }
 
-            if (questionTimer.getTimerUp()) {
-                Platform.runLater(() -> handleAnswer(-1)); // Automatische Antwort bei Timeout
+            if (!stopTimerThread && questionTimer.getTimerUp()) {
+                Platform.runLater(() -> handleAnswerMulti(-1));
             }
         }).start();
     }
@@ -213,8 +296,10 @@ public class QuizMultiController {
      */
     private void stopTimer() {
         if (questionTimer != null) {
+            remainingTime = questionTimer.getRemainingTime();
             questionTimer.stopTimer();
         }
+        stopTimerThread = true;
     }
 
     /**
@@ -222,15 +307,53 @@ public class QuizMultiController {
      */
     private void updateTimerLabel() {
         int remainingTime = questionTimer.getRemainingTime();
-        timerLabel.setText("⏳ " + remainingTime + "s");
-        timerLabel.setStyle(remainingTime <= 5 ? "-fx-text-fill: red;" : "-fx-text-fill: black;");
-    }
+        timerLabel.setText("⏳" + remainingTime);
 
-    /**
-     * Setzt den Timer zurück.
-     */
+        if (remainingTime == 0) {
+            timerLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        } else {
+            timerLabel.setStyle(null);
+        }
+    }
     private void resetTimer() {
-        stopTimer();
-        startTimer();
+        if (questionTimer != null) {
+            stopTimer();
+            remainingTime = 30;
+            startTimer();
+        }
+    }
+    private void showPausePopup() {
+        try {
+            if (rootPane.getScene() == null || rootPane.getScene().getWindow() == null) {
+                return;
+            }
+            stopTimer();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/popup/pause-popup.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage mainStage = (Stage) rootPane.getScene().getWindow();
+
+            PauseController pauseController = fxmlLoader.getController();
+            pauseController.setMainStage(mainStage);
+
+            Stage pauseStage = new Stage();
+            pauseStage.initStyle(StageStyle.UNDECORATED);
+            pauseStage.initStyle(StageStyle.TRANSPARENT);
+            pauseStage.initModality(Modality.APPLICATION_MODAL);
+            pauseStage.initOwner(mainStage);
+
+            pauseStage.setWidth(250);
+            pauseStage.setHeight(300);
+
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            pauseStage.setScene(scene);
+            pauseStage.showAndWait();
+
+            startTimer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
