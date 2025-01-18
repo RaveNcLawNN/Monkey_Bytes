@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import monkeybytes.quiz.controller.screen.SelectionDiffTopController;
 import monkeybytes.quiz.game.Player;
+import monkeybytes.quiz.game.PlayerDataManager;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -47,7 +48,7 @@ public class ProfileMultiController {
 
     private List<Player> players = new ArrayList<>();
 
-    private static final String DATA_FILE = "src/main/resources/data/playerData.json";
+    private final PlayerDataManager playerDataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
 
     @FXML
     public void initialize() {
@@ -62,35 +63,8 @@ public class ProfileMultiController {
      * Lädt die gespeicherten Profile aus der JSON-Datei und füllt die Dropdown-Menüs.
      */
     private void loadProfiles() {
-        try (FileReader reader = new FileReader(DATA_FILE)) {
-            Type listType = new TypeToken<List<Player>>() {
-            }.getType();
-            players = new Gson().fromJson(reader, listType);
-
-            if (players != null) {
-                for (Player player : players) {
-                    player1ProfileComboBox.getItems().add(player.getName());
-                    player2ProfileComboBox.getItems().add(player.getName());
-                }
-            } else {
-                players = new ArrayList<>();
-            }
-        } catch (Exception e) {
-            players = new ArrayList<>();
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Speichert die aktuellen Profile in der JSON-Datei.
-     */
-    private void saveProfiles() {
-        try (FileWriter writer = new FileWriter(DATA_FILE)) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            gson.toJson(players, writer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        player1ProfileComboBox.getItems().addAll(playerDataManager.getPlayerNames());
+        player2ProfileComboBox.getItems().addAll(playerDataManager.getPlayerNames());
     }
 
     /**
@@ -100,22 +74,18 @@ public class ProfileMultiController {
         String profileName = profileTextField.getText().trim();
 
         if (profileName.isEmpty()) {
-            System.out.println("Please enter a name.");
+            System.out.println("Input Error. Please enter a name.");
             return;
         }
 
-        for (Player player : players) {
-            if (player.getName().equalsIgnoreCase(profileName)) {
-                System.out.println("Profile " + player.getName() + " already exists.");
-                return;
-            }
-        }
+        boolean profileCreated = playerDataManager.addProfile(profileName);
 
-        Player newPlayer = new Player(profileName, 0);
-        players.add(newPlayer);
-        profileComboBox.getItems().add(profileName);
-        saveProfiles();
-        System.out.println("Profile created: " + profileName);
+        if (profileCreated) {
+            profileComboBox.getItems().add(profileName);
+            System.out.println("Profile created: " + profileName);
+        } else {
+            System.out.println("Profile Error Profile already exists: " + profileName);
+        }
     }
 
     /**
@@ -127,6 +97,11 @@ public class ProfileMultiController {
 
         if (player1Profile == null || player2Profile == null || player1Profile.isEmpty() || player2Profile.isEmpty()) {
             System.out.println("Please select profiles for both players.");
+            return;
+        }
+
+        if (player1Profile.equals(player2Profile)) {
+            System.out.println("Selection Error Players must select different profiles.");
             return;
         }
 

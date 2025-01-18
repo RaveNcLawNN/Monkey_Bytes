@@ -1,37 +1,12 @@
 [
   {
-    "name": "EmanuelTest4",
-    "score": 900,
+    "name": "EmanuelTest1",
+    "score": 1300,
     "lastSelectedOption": -1
   },
   {
     "name": "Bob",
     "score": 700,
     "lastSelectedOption": 0
-  },
-  {
-    "name": "EmanuelTest1",
-    "score": 300,
-    "lastSelectedOption": -1
-  },
-  {
-    "name": "EmanuelTest3",
-    "score": 300,
-    "lastSelectedOption": -1
-  },
-  {
-    "name": "Alice",
-    "score": 50,
-    "lastSelectedOption": 0
-  },
-  {
-    "name": "Player5",
-    "score": 0,
-    "lastSelectedOption": -1
-  },
-  {
-    "name": "EmanuelTest2",
-    "score": 0,
-    "lastSelectedOption": -1
   }
 ]
