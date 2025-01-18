@@ -18,10 +18,10 @@ public class Multiplayer extends GameLogic {
     }
 
     @Override
-    public void checkAnswer(int selectedOptionIndex, int playerIndex) {
+    public void checkAnswer(int selectedOptionIndex, int playerIndex, int remainingTime) {
         Question currentQuestion = getCurrentQuestion();
         if (currentQuestion != null && currentQuestion.getCorrectOptionIndex() == selectedOptionIndex) {
-            int scoreToAdd = calculateScore(100);
+            int scoreToAdd = questionTimer.calculateScore(100, remainingTime);
             playerScores[playerIndex] += scoreToAdd;
 //            players.get(playerIndex).addScore(scoreToAdd); // Synchronisation
             Player currentPlayer = getPlayers().get(playerIndex);

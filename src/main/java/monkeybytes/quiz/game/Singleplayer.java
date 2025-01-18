@@ -14,9 +14,9 @@ public class Singleplayer extends GameLogic {
         super(questions, 1, 15); // das ist also der angepasste Singleplayer-Konstruktor.
     }
 
-    public void checkAnswer (int selectedOptionIndex) {
+    public void checkAnswer (int selectedOptionIndex, int remainingTime) {
         // die checkAnswer-Methode aus GameLogic wird aufgerufen und PlayerIndex auf 0 gesetzt, da es nur einen Spieler gibt.
-        super.checkAnswer(selectedOptionIndex, 0);
+        super.checkAnswer(selectedOptionIndex, 0, remainingTime);
     }
 
 

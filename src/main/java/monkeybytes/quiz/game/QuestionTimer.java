@@ -62,11 +62,14 @@ public class QuestionTimer {
 
     //Findet die verbleibende Zeit heraus, um sie z.B. für die Berechnung der Punkte zu verwenden.
     public int getRemainingTime() {
-        if (isTimerUp || isTimerCanceled) {
-            return 0;
-        }
         long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
         //Falls das Ergebnis negativ sein sollte (unwahrscheinlich), wird 0 ausgegeben.
         return Math.max(0, timeLimitInSeconds - (int) elapsedTime);
+    }
+
+    //Berechnet den Score pro Frage und addiert ihn zum totalScore hinzu. Coolere Berechnung wär vielleicht cool.
+    public int calculateScore(int basePoints, int remainingTime) {
+        int bonus = remainingTime * 2;
+        return basePoints + bonus;
     }
 }

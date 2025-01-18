@@ -47,7 +47,7 @@ public class QuizSingleController {
     private Singleplayer game;
     private QuestionTimer questionTimer;
     private volatile boolean stopTimerThread = false;
-    private int remainingTime = 30;
+    private int timeLimitSeconds = 30;
 
     private TriviaAPIService triviaAPIService = new TriviaAPIService();
 
@@ -130,7 +130,7 @@ public class QuizSingleController {
             // Fragezähler aktualisieren
             questionCounterLabel.setText((game.getCurrentQuestionIndex() + 1) + " of " + game.getQuestions().size() + " Questions");
 
-            remainingTime = 30;
+            timeLimitSeconds = 30;
             stopTimer();
             startTimer();
         } else {
@@ -160,9 +160,11 @@ public class QuizSingleController {
             int correctIndex = currentQuestion.getCorrectOptionIndex();
 
             markAnswers(correctIndex, answerIndex);
-            stopTimer();
 
-            game.checkAnswer(answerIndex);
+            int remainingTime = questionTimer.getRemainingTime();
+            game.checkAnswer(answerIndex, remainingTime);
+
+            stopTimer();
 
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(event -> loadQuestion());
@@ -208,7 +210,7 @@ public class QuizSingleController {
      * Startet den Timer für die aktuelle Frage.
      */
     private void startTimer() {
-        questionTimer = new QuestionTimer(remainingTime);
+        questionTimer = new QuestionTimer(timeLimitSeconds);
         questionTimer.startTimer();
         stopTimerThread = false;
 
@@ -233,7 +235,6 @@ public class QuizSingleController {
      */
     private void stopTimer() {
         if (questionTimer != null) {
-//            remainingTime = questionTimer.getRemainingTime();
             questionTimer.stopTimer();
         }
         stopTimerThread = true;

@@ -27,19 +27,16 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
         return null;
     }
 
-    //Berechnet den Score pro Frage und addiert ihn zum totalScore hinzu. Coolere Berechnung wär vielleicht cool.
-    public int calculateScore(int basePoints) {
-        int bonus = questionTimer.getRemainingTime() * 2;
-        return basePoints + bonus;
-    }
+
 
     // überprüft, ob die Antwort eines Spielers korrekt ist und aktualisiert den Punktestand.
-    public void checkAnswer(int selectedOptionIndex, int playerIndex) {
+    public void checkAnswer(int selectedOptionIndex, int playerIndex, int remainingTime) {
         Question currentQuestion = getCurrentQuestion();
         if (currentQuestion != null && currentQuestion.getCorrectOptionIndex() == selectedOptionIndex) { // falls der Index der korrekten Antwort gleich dem Index der ausgewählten Antwort ist, gibt es Punkte.
-            int scoreToAdd = calculateScore(100);
+            int scoreToAdd = questionTimer.calculateScore(100,remainingTime);
             playerScores[playerIndex] += scoreToAdd;
         }
+        System.out.println(playerScores[playerIndex]);
         currentQuestionIndex++;
     }
 

@@ -9,19 +9,19 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.screen.ProfileMultiController">
     <children>
-        <VBox alignment="CENTER" spacing="20.0" prefHeight="600.0" prefWidth="800.0">
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0">
             <children>
-                <Label text="Player 1: Choose or Create Profile" styleClass="headerLabel"/>
-                <TextField fx:id="player1ProfileTextField" promptText="Create New Profile (Player 1)" styleClass="textField" prefWidth="300.0" maxWidth="300.0"/>
-                <Button fx:id="createPlayer1ProfileButton" text="Create (Player 1)" styleClass="guiButton"/>
-                <ComboBox fx:id="player1ProfileComboBox" promptText="Choose Profile (Player 1)" prefWidth="300.0"/>
+                <Label styleClass="headerLabel" text="Player 1: Choose or Create Profile" />
+                <TextField fx:id="player1ProfileTextField" maxWidth="300.0" prefWidth="300.0" promptText="Create New Profile (Player 1)" styleClass="textField" />
+                <Button fx:id="createPlayer1ProfileButton" styleClass="guiButton" text="Create (Player 1)" />
+                <ComboBox fx:id="player1ProfileComboBox" prefWidth="300.0" promptText="Choose Profile (Player 1)" />
 
-                <Label text="Player 2: Choose or Create Profile" styleClass="headerLabel"/>
-                <TextField fx:id="player2ProfileTextField" promptText="Create New Profile (Player 2)" styleClass="textField" prefWidth="300.0" maxWidth="300.0"/>
-                <Button fx:id="createPlayer2ProfileButton" text="Create (Player 2)" styleClass="guiButton"/>
-                <ComboBox fx:id="player2ProfileComboBox" promptText="Choose Profile (Player 2)" prefWidth="300.0"/>
+                <Label styleClass="headerLabel" text="Player 2: Choose or Create Profile" />
+                <TextField fx:id="player2ProfileTextField" maxWidth="300.0" prefWidth="300.0" promptText="Create New Profile (Player 2)" styleClass="textField" />
+                <Button fx:id="createPlayer2ProfileButton" styleClass="guiButton" text="Create (Player 2)" />
+                <ComboBox fx:id="player2ProfileComboBox" prefWidth="300.0" promptText="Choose Profile (Player 2)" />
 
-                <Button fx:id="nextButton" text="Start Game!" styleClass="guiButton"/>
+                <Button fx:id="nextButton" styleClass="guiButton" text="Choose Topic" />
             </children>
         </VBox>
     </children>

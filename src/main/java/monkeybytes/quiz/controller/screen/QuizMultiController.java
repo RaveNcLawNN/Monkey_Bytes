@@ -142,7 +142,8 @@ public class QuizMultiController {
         int currentPlayerIndex = game.getCurrentPlayer();
 
         // Antwort des Spielers registrieren
-        game.checkAnswer(selectedOptionIndex, currentPlayerIndex);
+        int remainingTimeForBonus = questionTimer.getRemainingTime();
+        game.checkAnswer(selectedOptionIndex, currentPlayerIndex, remainingTimeForBonus);
         System.out.println("DEBUG: Player " + currentPlayerIndex + " answered. Question Index: " + game.getCurrentQuestionIndex());
 
         // Wenn ALLE Spieler geantwortet haben, wird die Runde beendet.
