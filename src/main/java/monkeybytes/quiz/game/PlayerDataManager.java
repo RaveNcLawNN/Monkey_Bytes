@@ -56,29 +56,40 @@ public class PlayerDataManager {
         }
     }
 
-    //Übernimmt Spieler und einen zu aktualisierenden Score. Aktualisiert den Score, oder erstellt ein neues Objekt.
-    //Glaub am besten einzusetzen 1x bei der Erstellung des Namens vor dem Spiel mit newScore = 0 und 1x am Ende des Spiels.
-    //So ist sichergestellt, dass, auch wenn kein Spiel beendet wird, der Player gespeichert wird und auch gut in der Highscore Tabelle angezeigt werden kann.
-    public void updatePlayerInformation(String playerName, int newScore) {
-
-        boolean playerFound = false;
-
+    //Eine extra Methode im Player Objekte zu erstellen. Bei Erstellung wird ein Score von 0 übergeben.
+    public boolean addProfile(String profileName) {
         for (Player player : players) {
-            if (player.getName().equals(playerName)) {
-                player.setScore(newScore); // Setze immer den neuen Score
-                playerFound = true;
+            if (player.getName().equals(profileName)) {
+                System.out.println("Profile " + player.getName() + " already exists.");
+                return false;
+            }
+        }
+        players.add(new Player(profileName, 0));
+        savePlayerData();
+        return true;
+    }
+
+    //Aktualisiert Player Information, wenn neuer Score höher ist als der alte.
+    public void updatePlayerInformation(String playerName, int newScore) {
+        for (Player player : players) {
+            if (player.getName().equals(playerName) && player.getScore() < newScore) {
+                player.setScore(newScore);
                 break;
             }
         }
-
-        if (!playerFound) {
-            players.add(new Player(playerName, newScore));
-        }
-
         savePlayerData();
     }
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    //Gibt eine Liste mit Player Namen zurück.
+    public List<String> getPlayerNames() {
+        List<String> names = new ArrayList<>();
+        for (Player player : players) {
+            names.add(player.getName());
+        }
+        return names;
     }
 }

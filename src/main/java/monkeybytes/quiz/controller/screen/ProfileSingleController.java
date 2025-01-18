@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import monkeybytes.quiz.controller.screen.SelectionDiffTopController;
 import monkeybytes.quiz.game.Player;
+import monkeybytes.quiz.game.PlayerDataManager;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -36,9 +37,7 @@ public class ProfileSingleController {
     @FXML
     private Button nextButton;
 
-    private List<Player> players = new ArrayList<>();
-
-    private static final String DATA_FILE = "src/main/resources/data/playerData.json";
+    private final PlayerDataManager playerDataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
 
     /**
      * Initialisiert den Controller.
@@ -56,37 +55,7 @@ public class ProfileSingleController {
      * Lädt die gespeicherten Profile aus der JSON-Datei und füllt das Dropdown-Menü.
      */
     private void loadProfiles() {
-        try (FileReader reader = new FileReader(DATA_FILE)) {
-            // Der Typ der Liste, die aus JSON gelesen wird.
-            Type listType = new TypeToken<List<Player>>() {}.getType();
-            // Liest die JSON-Datei und wandelt sie in eine Liste von Player-Objekten um.
-            players = new Gson().fromJson(reader, listType);
-
-            // Falls Profile existieren, fügt sie dem Dropdown-Menü hinzu.
-            if (players != null) {
-                for (Player player : players) {
-                    profileComboBox.getItems().add(player.getName());
-                }
-            } else {
-                players = new ArrayList<>(); // Initialisiert eine leere Liste, falls keine Profile vorhanden sind.
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            players = new ArrayList<>();
-        }
-    }
-
-    /**
-     * Speichert die aktuellen Profile in der JSON-Datei.
-     */
-    private void saveProfiles() {
-        try (FileWriter writer = new FileWriter(DATA_FILE)) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            gson.toJson(players, writer);
-//            new Gson().toJson(players, writer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        profileComboBox.getItems().addAll(playerDataManager.getPlayerNames());
     }
 
     /**
@@ -102,22 +71,15 @@ public class ProfileSingleController {
             return;
         }
 
-        // Überprüft, ob der Profilname bereits existiert.
-        for (Player player : players) {
-            if (player.getName().equalsIgnoreCase(profileName)) {
-                System.out.println("Profile " + player.getName() + " already exists.");
-                return;
-            }
-        }
+        boolean profileCreated = playerDataManager.addProfile(profileName);
 
-        // Erstellt ein neues Player-Objekt mit dem eingegebenen Profilnamen.
-        Player newPlayer = new Player(profileName, 0);
-        // Fügt das neue Profil zur Liste und zum Dropdown-Menü hinzu.
-        players.add(newPlayer);
-        profileComboBox.getItems().add(profileName);
-        // Speichert die aktualisierte Profil-Liste in der JSON-Datei.
-        saveProfiles();
-        System.out.println("Profil created: " + profileName);
+        if (profileCreated) {
+            profileComboBox.getItems().add(profileName);
+            System.out.println("Profile created: " + profileName);
+        } else {
+            //Visueller "Alert" benötigt
+            System.out.println("Profile already exists: " + profileName);
+        }
     }
 
     /**
