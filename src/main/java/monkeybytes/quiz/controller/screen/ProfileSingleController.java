@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -36,6 +37,9 @@ public class ProfileSingleController {
 
     @FXML
     private Button nextButton;
+
+    @FXML
+    private Label profileAlerts;
 
     private final PlayerDataManager playerDataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
 
@@ -66,8 +70,10 @@ public class ProfileSingleController {
         String profileName = newProfileTextField.getText().trim();
 
         // Überprüft, ob das Eingabefeld leer ist.
-        if (profileName.isEmpty()) {
-            System.out.println("Please enter your name.");
+        if (profileName.isEmpty() || !(profileName.matches("[a-zA-Z0-9]{3,15}"))) {
+            profileAlerts.setText("Please choose a valid Name.");
+            profileAlerts.setStyle("-fx-text-fill: red");
+            profileAlerts.setVisible(true);
             return;
         }
 
@@ -75,10 +81,13 @@ public class ProfileSingleController {
 
         if (profileCreated) {
             profileComboBox.getItems().add(profileName);
-            System.out.println("Profile created: " + profileName);
+            profileAlerts.setText("Profile created: " + profileName);
+            profileAlerts.setStyle("-fx-text-fill: green");
+            profileAlerts.setVisible(true);
         } else {
-            //Visueller "Alert" benötigt
-            System.out.println("Profile already exists: " + profileName);
+            profileAlerts.setText("Profile already exists.");
+            profileAlerts.setStyle("-fx-text-fill: red");
+            profileAlerts.setVisible(true);
         }
     }
 
@@ -90,7 +99,9 @@ public class ProfileSingleController {
 
         // Überprüft, ob ein Profil ausgewählt wurde.
         if (selectedProfile == null || selectedProfile.isEmpty()) {
-            System.out.println("Please choose a profile.");
+            profileAlerts.setText("Please choose or create a Profile.");
+            profileAlerts.setStyle("-fx-text-fill: red");
+            profileAlerts.setVisible(true);
             return;
         }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -9,13 +10,19 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.screen.ProfileSingleController">
    <children>
-      <VBox alignment="CENTER" spacing="20.0" prefHeight="600.0" prefWidth="800.0">
+      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0">
          <children>
-            <Label text="Create or choose Profile" styleClass="headerLabel"/>
-            <TextField fx:id="newProfileTextField" promptText="Create New Profile" styleClass="textField" prefWidth="300.0" maxWidth="300.0"/>
-            <Button fx:id="createProfileButton" text="Create" styleClass="guiButton"/>
-            <ComboBox fx:id="profileComboBox" promptText="Choose Profile" prefWidth="300.0"/>
-            <Button fx:id="nextButton" text="Continue" styleClass="guiButton"/>
+            <Label fx:id="profileAlerts" styleClass="headerLabel" text="Create or choose Profile" />
+            <TextField fx:id="newProfileTextField" maxWidth="300.0" prefWidth="300.0" promptText="Create New Profile" styleClass="textField" />
+            <Button fx:id="createProfileButton" styleClass="guiButton" text="Create">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin></Button>
+            <ComboBox fx:id="profileComboBox" prefWidth="300.0" promptText="Choose Profile" />
+            <Button fx:id="nextButton" styleClass="guiButton" text="Continue">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></Button>
          </children>
       </VBox>
    </children>
