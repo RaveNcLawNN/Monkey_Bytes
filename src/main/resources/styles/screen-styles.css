@@ -5,6 +5,20 @@
     -fx-background-color: #ffeab3;
 }
 
+.multiplayerVbox1 {
+    -fx-padding: 15;
+    -fx-border-color: black;
+    -fx-border-width: 1.5;
+    -fx-background-color: #ff69b4;
+}
+
+.multiplayerVbox2 {
+    -fx-padding: 15;
+    -fx-border-color: black;
+    -fx-border-width: 1.5;
+    -fx-background-color: #66cdaa
+}
+
 /* modeButton1 - Stil für Mode-Button1 (mode-selection-screen.fxml) */
 .modeButton1 {
     -fx-background-color: #66cdaa;

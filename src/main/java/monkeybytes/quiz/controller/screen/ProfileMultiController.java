@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -46,6 +47,12 @@ public class ProfileMultiController {
     @FXML
     private Button nextButton;
 
+    @FXML
+    private Label profileAlerts1;
+
+    @FXML
+    private Label profileAlerts2;
+
     private List<Player> players = new ArrayList<>();
 
     private final PlayerDataManager playerDataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
@@ -54,8 +61,8 @@ public class ProfileMultiController {
     public void initialize() {
         loadProfiles();
 
-        createPlayer1ProfileButton.setOnAction(event -> createProfile(player1ProfileTextField, player1ProfileComboBox));
-        createPlayer2ProfileButton.setOnAction(event -> createProfile(player2ProfileTextField, player2ProfileComboBox));
+        createPlayer1ProfileButton.setOnAction(event -> createProfileOne(player1ProfileTextField, player1ProfileComboBox));
+        createPlayer2ProfileButton.setOnAction(event -> createProfileTwo(player2ProfileTextField, player2ProfileComboBox));
         nextButton.setOnAction(event -> goToCategorySelection());
     }
 
@@ -70,11 +77,13 @@ public class ProfileMultiController {
     /**
      * Erstellt ein neues Profil basierend auf dem übergebenen Textfeld und fügt es in das Dropdown-Menü ein.
      */
-    private void createProfile(TextField profileTextField, ComboBox<String> profileComboBox) {
+    private void createProfileOne(TextField profileTextField, ComboBox<String> profileComboBox) {
         String profileName = profileTextField.getText().trim();
 
-        if (profileName.isEmpty()) {
-            System.out.println("Input Error. Please enter a name.");
+        if (profileName.isEmpty() || !(profileName.matches("[a-zA-Z0-9]{3,15}"))) {
+            profileAlerts1.setText("Please choose a valid Name.");
+            profileAlerts1.setStyle("-fx-text-fill: darkred");
+            profileAlerts1.setVisible(true);
             return;
         }
 
@@ -82,9 +91,37 @@ public class ProfileMultiController {
 
         if (profileCreated) {
             profileComboBox.getItems().add(profileName);
-            System.out.println("Profile created: " + profileName);
+            profileAlerts1.setText("Profile created: " + profileName);
+            profileAlerts1.setStyle("-fx-text-fill: green");
+            profileAlerts1.setVisible(true);
         } else {
-            System.out.println("Profile Error Profile already exists: " + profileName);
+            profileAlerts1.setText("Profile already exists.");
+            profileAlerts1.setStyle("-fx-text-fill: darkred");
+            profileAlerts1.setVisible(true);
+        }
+    }
+
+    private void createProfileTwo(TextField profileTextField, ComboBox<String> profileComboBox) {
+        String profileName = profileTextField.getText().trim();
+
+        if (profileName.isEmpty() || !(profileName.matches("[a-zA-Z0-9]{3,15}"))) {
+            profileAlerts2.setText("Please choose a valid Name.");
+            profileAlerts2.setStyle("-fx-text-fill: red");
+            profileAlerts2.setVisible(true);
+            return;
+        }
+
+        boolean profileCreated = playerDataManager.addProfile(profileName);
+
+        if (profileCreated) {
+            profileComboBox.getItems().add(profileName);
+            profileAlerts2.setText("Profile created: " + profileName);
+            profileAlerts2.setStyle("-fx-text-fill: green");
+            profileAlerts2.setVisible(true);
+        } else {
+            profileAlerts2.setText("Profile already exists.");
+            profileAlerts2.setStyle("-fx-text-fill: red");
+            profileAlerts2.setVisible(true);
         }
     }
 
@@ -96,12 +133,22 @@ public class ProfileMultiController {
         String player2Profile = player2ProfileComboBox.getValue();
 
         if (player1Profile == null || player2Profile == null || player1Profile.isEmpty() || player2Profile.isEmpty()) {
-            System.out.println("Please select profiles for both players.");
+            profileAlerts1.setText("Select TWO Players.");
+            profileAlerts1.setStyle("-fx-text-fill: darkred");
+            profileAlerts1.setVisible(true);
+            profileAlerts2.setText("Select TWO Players.");
+            profileAlerts2.setStyle("-fx-text-fill: red");
+            profileAlerts2.setVisible(true);
             return;
         }
 
         if (player1Profile.equals(player2Profile)) {
-            System.out.println("Selection Error Players must select different profiles.");
+            profileAlerts1.setText("Select two DIFFERENT Players.");
+            profileAlerts1.setStyle("-fx-text-fill: darkred");
+            profileAlerts1.setVisible(true);
+            profileAlerts2.setText("Select two DIFFERENT Players.");
+            profileAlerts2.setStyle("-fx-text-fill: red");
+            profileAlerts2.setVisible(true);
             return;
         }
 
