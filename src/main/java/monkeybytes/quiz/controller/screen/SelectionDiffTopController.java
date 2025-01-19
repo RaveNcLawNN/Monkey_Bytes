@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import monkeybytes.quiz.service.TriviaAPIService;
@@ -24,6 +25,9 @@ public class SelectionDiffTopController {
 
     @FXML
     private Button startQuizButton;
+
+    @FXML
+    private Label chooseCatDiffAlert;
 
     private String profileName; // Das Profil, das vom vorherigen Screen übergeben wurde
     private TriviaAPIService triviaAPIService = new TriviaAPIService(); // Instanz des TriviaAPIService
@@ -74,7 +78,9 @@ public class SelectionDiffTopController {
         String selectedDifficulty = difficultyComboBox.getValue();
 
         if (selectedCategory == null || selectedDifficulty == null) {
-            System.out.println("Please choose a category and difficulty level!");
+            chooseCatDiffAlert.setText("Choose Category AND Difficulty.");
+            chooseCatDiffAlert.setStyle("-fx-text-fill: red");
+            chooseCatDiffAlert.setVisible(true);
             return;
         }
 

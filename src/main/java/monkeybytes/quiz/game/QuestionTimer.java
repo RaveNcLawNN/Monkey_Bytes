@@ -69,7 +69,7 @@ public class QuestionTimer {
 
     //Berechnet den Score pro Frage und addiert ihn zum totalScore hinzu. Coolere Berechnung wär vielleicht cool.
     public int calculateScore(int basePoints, int remainingTime) {
-        int bonus = remainingTime * 2;
-        return basePoints + bonus;
+        double bonus = remainingTime * remainingTime * 0.5;
+        return basePoints + (int) bonus;
     }
 }

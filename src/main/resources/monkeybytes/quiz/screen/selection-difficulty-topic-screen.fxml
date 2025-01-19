@@ -8,12 +8,12 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@../../../styles/screen-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="monkeybytes.quiz.controller.screen.SelectionDiffTopController">
     <children>
-        <VBox alignment="CENTER" spacing="20.0" prefHeight="600.0" prefWidth="800.0">
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0">
             <children>
-                <Label text="Choose Category and Difficulty" styleClass="headerLabel"/>
-                <ComboBox fx:id="categoryComboBox" promptText="Category" prefWidth="300.0"/>
-                <ComboBox fx:id="difficultyComboBox" promptText="Difficulty" prefWidth="300.0"/>
-                <Button fx:id="startQuizButton" text="Start Quiz!" styleClass="guiButton"/>
+                <Label fx:id="chooseCatDiffAlert" styleClass="headerLabel" text="Choose Category and Difficulty" />
+                <ComboBox fx:id="categoryComboBox" prefWidth="300.0" promptText="Category" />
+                <ComboBox fx:id="difficultyComboBox" prefWidth="300.0" promptText="Difficulty" />
+                <Button fx:id="startQuizButton" styleClass="guiButton" text="Start Quiz!" />
             </children>
         </VBox>
     </children>
