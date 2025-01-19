@@ -36,7 +36,7 @@ public class QuizSingleController {
     private Pane headerPane, questionPane;
 
     @FXML
-    private Label questionCounterLabel, timerLabel, currentPlayerLabel, questionLabel;
+    private Label questionCounterLabel, timerLabel, currentPlayerLabel, questionLabel, scoreDisplay;
 
     @FXML
     private VBox optionsVBox;
@@ -165,6 +165,8 @@ public class QuizSingleController {
             game.checkAnswer(answerIndex, remainingTime);
 
             stopTimer();
+
+            scoreDisplay.setText("Score: " + game.getScore());
 
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(event -> loadQuestion());
