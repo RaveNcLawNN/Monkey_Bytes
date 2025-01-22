@@ -24,8 +24,6 @@ public class Multiplayer extends GameLogic {
             int scoreToAdd = questionTimer.calculateScore(100, remainingTime);
             playerScores[playerIndex] += scoreToAdd;
 //            players.get(playerIndex).addScore(scoreToAdd); // Synchronisation
-            Player currentPlayer = getPlayers().get(playerIndex);
-            currentPlayer.setScore(currentPlayer.getScore() + scoreToAdd);
         }
 //        currentQuestionIndex++;
     }
@@ -51,12 +49,12 @@ public class Multiplayer extends GameLogic {
         Player player1 = getPlayers().get(0);
         Player player2 = getPlayers().get(1);
 
-        if (player1.getScore() > player2.getScore()) {
-            return player1.getName() + " wins with " + player1.getScore() + " points!";
-        } else if (player1.getScore() < player2.getScore()) {
-            return player2.getName() + " wins with " + player2.getScore() + " points!";
+        if (getScoreCurrentPlayer(0) > getScoreCurrentPlayer(1)) {
+            return player1.getName() + " wins with " + getScoreCurrentPlayer(0) + " points!";
+        } else if (getScoreCurrentPlayer(1) > getScoreCurrentPlayer(0)) {
+            return player2.getName() + " wins with " + getScoreCurrentPlayer(1) + " points!";
         } else {
-            return "It's a draw! Both players scored " + player1.getScore() + " points!";
+            return "It's a draw! Both players scored " + getScoreCurrentPlayer(0) + " points!";
         }
     }
 
@@ -67,5 +65,9 @@ public class Multiplayer extends GameLogic {
     // gibt die Punktestände der Spieler zurück, z.B. für den Endscreen.
     public int [] getScores() {
         return playerScores;
+    }
+
+    public int getScoreCurrentPlayer(int currentPlayerIndex) {
+        return playerScores[currentPlayerIndex];
     }
 }

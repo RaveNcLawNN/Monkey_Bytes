@@ -213,7 +213,6 @@ public class QuizMultiController {
         isAnswerSelected = false; // Ermöglicht eine neue Auswahl
 
         loadQuestion();
-        saveScores();
     }
 
     private void showPlayerSwitchScreen() {
@@ -235,8 +234,8 @@ public class QuizMultiController {
         currentPlayerLabel.setText("Current Player: " + currentPlayer.getName());
 
         List<Player> players = game.getPlayers();
-        player1ScoreLabel.setText(players.get(0).getName() + ": " + players.get(0).getScore() + " Points");
-        player2ScoreLabel.setText(players.get(1).getName() + ": " + players.get(1).getScore() + " Points");
+        player1ScoreLabel.setText(players.get(0).getName() + ": " + game.getScoreCurrentPlayer(0) + " Points");
+        player2ScoreLabel.setText(players.get(1).getName() + ": " + game.getScoreCurrentPlayer(1) + " Points");
     }
 
     private void markAnswers(int correctIndex) {
@@ -260,7 +259,11 @@ public class QuizMultiController {
 
     private void saveScores() {
         PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
-        game.getPlayers().forEach(player -> dataManager.updatePlayerInformation(player.getName(), player.getScore()));
+        List<Player> players = game.getPlayers();
+
+        dataManager.updatePlayerInformation(players.get(0).getName(), game.getScoreCurrentPlayer(0));
+        dataManager.updatePlayerInformation(players.get(1).getName(), game.getScoreCurrentPlayer(1));
+
     }
 
     private void showResults() {
