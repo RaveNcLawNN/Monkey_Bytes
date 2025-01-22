@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -48,6 +49,8 @@ public class QuizSingleController {
     private QuestionTimer questionTimer;
     private volatile boolean stopTimerThread = false;
     private int timeLimitSeconds = 30;
+    // Flag, damit nur einmal pro Frage geklickt werden kann
+    private boolean isAnswerSelected = false;
 
     private TriviaAPIService triviaAPIService = new TriviaAPIService();
 
@@ -88,20 +91,24 @@ public class QuizSingleController {
      */
     public void setApiParameters(String category, String difficulty, String profileName) {
         try {
-            // Spielername setzen
+            // Spielername ins Label setzen
             currentPlayerLabel.setText("Player: " + profileName);
 
-            // Kategorie-ID abrufen und Fragen von der API laden
+            // Kategorie-ID abrufen
             String categoryId = triviaAPIService.getFixedCategoryId(category);
-            List<Question> questions = triviaAPIService.fetchUniqueQuestions(10, categoryId, difficulty);
+
+            // 10 Fragen abfragen
+            List<Question> questions = triviaAPIService.fetchQuestions(10, categoryId, difficulty);
 
             // Spielinitialisierung mit geladenen Fragen
             game = new Singleplayer(questions);
+
+            // Erste Frage laden
             loadQuestion();
 
         } catch (Exception e) {
             e.printStackTrace();
-            questionLabel.setText("Fehler beim Laden der Fragen. Bitte versuche es erneut.");
+            questionLabel.setText("Could not load questions. Please try again.");
         }
     }
 
@@ -112,20 +119,21 @@ public class QuizSingleController {
         Question currentQuestion = game.getCurrentQuestion();
         if (currentQuestion != null) {
             resetButtonStyles();
+            isAnswerSelected = false;
 
             // Frage und Antwortmöglichkeiten setzen
             // adjustable font size, falls die Frage zu lang ist
             questionLabel.setText(currentQuestion.getQuestionText());
-            adjustFontSize(questionLabel, 125, 30, 24);
+            adjustFontSize(questionLabel);
 
             optionAButton.setText(currentQuestion.getOptions().get(0));
-            adjustFontSize(optionAButton, 50, 23, 16);
+            adjustFontSize(optionAButton);
             optionBButton.setText(currentQuestion.getOptions().get(1));
-            adjustFontSize(optionAButton, 50, 23, 16);
+            adjustFontSize(optionAButton);
             optionCButton.setText(currentQuestion.getOptions().get(2));
-            adjustFontSize(optionAButton, 50, 23, 16);
+            adjustFontSize(optionAButton);
             optionDButton.setText(currentQuestion.getOptions().get(3));
-            adjustFontSize(optionAButton, 50, 23, 16);
+            adjustFontSize(optionAButton);
 
             // Fragezähler aktualisieren
             questionCounterLabel.setText((game.getCurrentQuestionIndex() + 1) + " of " + game.getQuestions().size() + " Questions");
@@ -140,25 +148,20 @@ public class QuizSingleController {
     }
 
     /**
-     * Zeigt die Ergebnisse des Spiels an.
-     */
-    private void showResults() {
-
-            PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
-            dataManager.updatePlayerInformation(currentPlayerLabel.getText().replace("Player: ", ""), game.getScore());
-
-            questionLabel.setText("Quiz finished! Your score: " + game.getScore());
-        }
-
-    /**
      * Handhabt die Auswahl einer Antwort.
      * @param answerIndex Index der ausgewählten Antwort.
      */
     private void handleAnswerSingle(int answerIndex) {
+
+        // Nur einen Klick pro Frage zulassen
+        if (isAnswerSelected) return;
+        isAnswerSelected = true;
+
         Question currentQuestion = game.getCurrentQuestion();
         if (currentQuestion != null) {
             int correctIndex = currentQuestion.getCorrectOptionIndex();
 
+            // Richtige/falsche Antworten markieren
             markAnswers(correctIndex, answerIndex);
 
             int remainingTime = questionTimer.getRemainingTime();
@@ -172,6 +175,18 @@ public class QuizSingleController {
             pause.setOnFinished(event -> loadQuestion());
             pause.play();
         }
+    }
+
+    /**
+     * Zeigt die Ergebnisse des Spiels an.
+     */
+    private void showResults() {
+
+        // Score in JSON speichern
+        PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
+        dataManager.updatePlayerInformation(currentPlayerLabel.getText().replace("Player: ", ""), game.getScore());
+
+        questionLabel.setText("Quiz finished! Your score: " + game.getScore());
     }
 
     /**
@@ -192,21 +207,6 @@ public class QuizSingleController {
         }
     }
 
-    private void adjustFontSize(Label label, int maxLength, double defaultSize, double minSize) {
-        if (label.getText().length() > maxLength) {
-            label.setStyle("-fx-font-size: " + minSize + "px;");
-        } else {
-            label.setStyle("-fx-font-size: " + defaultSize + "px;");
-        }
-    }
-
-    private void adjustFontSize(Button button, int maxLength, double defaultSize, double minSize) {
-        if (button.getText().length() > maxLength) {
-            button.setStyle("-fx-font-size: " + minSize + "px;");
-        } else {
-            button.setStyle("-fx-font-size: " + defaultSize + "px;");
-        }
-    }
 
     /**
      * Startet den Timer für die aktuelle Frage.
@@ -264,6 +264,28 @@ public class QuizSingleController {
         for (Button button : buttons) {
             button.setStyle(null);
         }
+    }
+
+    /**
+     * Passt die Schriftgröße an.
+     */
+    private void adjustFontSize(Labeled labeled) {
+        // Hol dir den Text
+        String txt = labeled.getText();
+        int length = (txt != null) ? txt.length() : 0;
+
+        // Beispiel-Schwellwerte
+        if (length > 300) {
+            labeled.setStyle("-fx-font-size: 10px;");
+        } else if (length > 200) {
+            labeled.setStyle("-fx-font-size: 14px;");
+        } else if (length > 100) {
+            labeled.setStyle("-fx-font-size: 18px;");
+        } else {
+            labeled.setStyle("-fx-font-size: 24px;");
+        }
+
+        labeled.setWrapText(true);
     }
 
     private void showPausePopup() {

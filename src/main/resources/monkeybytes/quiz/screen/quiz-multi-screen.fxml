@@ -15,8 +15,8 @@
         <Pane fx:id="headerPane" layoutX="16.0" layoutY="14.0" prefHeight="100.0" prefWidth="770.0"
               AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <children>
-                <Label fx:id="player1ScoreLabel" layoutY="10.0" styleClass="headerLabel" text=""/>
-                <Label fx:id="player2ScoreLabel" layoutY="40.0" styleClass="headerLabel" text=""/>
+                <Label fx:id="player1ScoreLabel" layoutY="10.0" styleClass="playerScoreLabel" text=""/>
+                <Label fx:id="player2ScoreLabel" layoutY="40.0" styleClass="playerScoreLabel" text=""/>
                 <Label fx:id="timerLabel" layoutX="714.0" layoutY="45.0" styleClass="headerLabel" text="⏳30s" />
                 <Label fx:id="currentPlayerLabel" layoutX="287.0" layoutY="45.0" styleClass="headerLabel" text="" />
             </children>
@@ -32,10 +32,10 @@
                        prefHeight="300.0" prefWidth="400.0" spacing="25.0">
 
                     <children>
-                        <Button fx:id="optionAButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option A" />
-                        <Button fx:id="optionBButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option B" />
-                        <Button fx:id="optionCButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option C" />
-                        <Button fx:id="optionDButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option D" />
+                        <Button fx:id="optionAButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option A" wrapText="true" />
+                        <Button fx:id="optionBButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option B" wrapText="true"/>
+                        <Button fx:id="optionCButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option C" wrapText="true"/>
+                        <Button fx:id="optionDButton" prefHeight="50.0" prefWidth="380.0" styleClass="answerButton" text="Option D" wrapText="true"/>
                     </children>
                 </VBox>
                 <VBox fx:id="optionsVBox" layoutX="15.0" layoutY="105.0" prefHeight="300.0" prefWidth="70.0" spacing="25.0"

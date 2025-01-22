@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -80,7 +81,9 @@ public class QuizMultiController {
             // Trivia-Daten von der API abrufen
             TriviaAPIService triviaAPIService = new TriviaAPIService();
             String categoryId = triviaAPIService.getFixedCategoryId(category);
-            List<Question> questions = triviaAPIService.fetchUniqueQuestions(10, categoryId, difficulty);
+
+            // 10 Fragen holen
+            List<Question> questions = triviaAPIService.fetchQuestions(10, categoryId, difficulty);
 
             // Spielerprofil-Daten laden
             PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
@@ -118,12 +121,14 @@ public class QuizMultiController {
 
             // Frage und Antwortoptionen setzen
             questionLabel.setText(currentQuestion.getQuestionText());
-            List<String> options = currentQuestion.getOptions();
+            adjustFontSize(questionLabel);
 
+            List<String> options = currentQuestion.getOptions();
             for (int i = 0; i < options.size(); i++) {
-                Button btn = answerButtons.get(i);
-                btn.setText(options.get(i));
-                btn.setStyle(""); // Sicherstellen, dass Styles zurückgesetzt werden
+                Button button = answerButtons.get(i);
+                button.setText(options.get(i));
+                button.setStyle(""); // Sicherstellen, dass Styles zurückgesetzt werden
+                adjustFontSize(button);
             }
 
             startTimer(); // Timer neu starten
@@ -132,6 +137,10 @@ public class QuizMultiController {
         }
     }
 
+
+    /**
+     * Wird aufgerufen, wenn ein Spieler eine Antwort anklickt.
+     */
     private void handleAnswerMulti(int selectedOptionIndex) {
         if (isAnswerSelected || game.getCurrentQuestion() == null) {
             System.out.println("DEBUG: Answer already selected or no question available.");
@@ -216,11 +225,16 @@ public class QuizMultiController {
         saveScores();
     }
 
+    /**
+     * Zeigt den Screen an, der sagt "[Player X]'s turn".
+     */
     private void showPlayerSwitchScreen() {
         int currentPlayerIndex = game.getCurrentPlayer();
         Player nextPlayer = game.getPlayers().get(currentPlayerIndex);
 
         switchLabel.setText(nextPlayer.getName() + "'s turn!");
+
+        updatePlayerDisplay();
 
         playerSwitchOverlay.setVisible(true);
         playerSwitchOverlay.toFront(); // Überlagert die UI
@@ -229,16 +243,23 @@ public class QuizMultiController {
         isAnswerSelected = false; // Zurücksetzen, um die neue Eingabe zuzulassen
     }
 
+    /**
+     * Aktualisiert die Labels der Spieleranzeige (aktueller Spieler und Scores).
+     */
     private void updatePlayerDisplay() {
         Player currentPlayer = game.getPlayers().get(game.getCurrentPlayer());
 
-        currentPlayerLabel.setText("Current Player: " + currentPlayer.getName());
+        currentPlayerLabel.setText("Player: " + currentPlayer.getName());
 
         List<Player> players = game.getPlayers();
         player1ScoreLabel.setText(players.get(0).getName() + ": " + players.get(0).getScore() + " Points");
         player2ScoreLabel.setText(players.get(1).getName() + ": " + players.get(1).getScore() + " Points");
     }
 
+
+    /**
+     * Färbt die korrekte Antwort grün, alle anderen rot.
+     */
     private void markAnswers(int correctIndex) {
         for (int i = 0; i < answerButtons.size(); i++) {
             Button button = answerButtons.get(i);
@@ -250,6 +271,9 @@ public class QuizMultiController {
         }
     }
 
+    /**
+     * Aktiviert/deaktiviert die Buttons (wichtig, damit kein Doppelklick).
+     */
     private void setAnswerButtonsDisabled(boolean disabled) {
         answerButtons.forEach(button -> button.setDisable(disabled));
     }
@@ -258,11 +282,18 @@ public class QuizMultiController {
         answerButtons.forEach(button -> button.setStyle(null));
     }
 
+    /**
+     * Speichert Punktestände in JSON (PlayerDataManager).
+     */
     private void saveScores() {
         PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
         game.getPlayers().forEach(player -> dataManager.updatePlayerInformation(player.getName(), player.getScore()));
     }
 
+    /**
+     * Wird aufgerufen, wenn keine Fragen mehr vorhanden sind.
+     * Zeigt das Ergebnis an.
+     */
     private void showResults() {
         questionLabel.setText("🎉 " + game.getWinner());
         setAnswerButtonsDisabled(true);
@@ -304,6 +335,17 @@ public class QuizMultiController {
     }
 
     /**
+     * Timer auf 30s zurücksetzen und neu starten.
+     */
+    private void resetTimer() {
+        if (questionTimer != null) {
+            stopTimer();
+            remainingTime = 30;
+            startTimer();
+        }
+    }
+
+    /**
      * Aktualisiert das Timer-Label im GUI.
      */
     private void updateTimerLabel() {
@@ -316,13 +358,32 @@ public class QuizMultiController {
             timerLabel.setStyle(null);
         }
     }
-    private void resetTimer() {
-        if (questionTimer != null) {
-            stopTimer();
-            remainingTime = 30;
-            startTimer();
+
+    /**
+     * Passt die Schriftgröße an.
+     */
+    private void adjustFontSize(Labeled labeled) {
+        // Hol dir den Text
+        String txt = labeled.getText();
+        int length = (txt != null) ? txt.length() : 0;
+
+        // Beispiel-Schwellwerte
+        if (length > 300) {
+            labeled.setStyle("-fx-font-size: 10px;");
+        } else if (length > 200) {
+            labeled.setStyle("-fx-font-size: 14px;");
+        } else if (length > 100) {
+            labeled.setStyle("-fx-font-size: 18px;");
+        } else {
+            labeled.setStyle("-fx-font-size: 24px;");
         }
+
+        labeled.setWrapText(true);
     }
+
+    /**
+     * ESC -> Pause-Popup
+     */
     private void showPausePopup() {
         try {
             if (rootPane.getScene() == null || rootPane.getScene().getWindow() == null) {
