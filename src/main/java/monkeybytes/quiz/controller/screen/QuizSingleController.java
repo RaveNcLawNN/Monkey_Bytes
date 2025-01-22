@@ -28,20 +28,15 @@ import monkeybytes.quiz.service.TriviaAPIService;
 
 import java.util.List;
 
-// quiz-single-screen.fxml
 public class QuizSingleController {
     @FXML
     private AnchorPane rootPane;
-
     @FXML
     private Pane headerPane, questionPane;
-
     @FXML
     private Label questionCounterLabel, timerLabel, currentPlayerLabel, questionLabel, scoreDisplay;
-
     @FXML
     private VBox optionsVBox;
-
     @FXML
     private Button optionAButton, optionBButton, optionCButton, optionDButton;
 
@@ -49,20 +44,22 @@ public class QuizSingleController {
     private QuestionTimer questionTimer;
     private volatile boolean stopTimerThread = false;
     private int timeLimitSeconds = 30;
-    // Flag, damit nur einmal pro Frage geklickt werden kann
     private boolean isAnswerSelected = false;
-
     private TriviaAPIService triviaAPIService = new TriviaAPIService();
 
+    /**
+     * Initialisiert den Quiz-Bildschirm mit event handlers für Benutzerinteraktionen.
+     * - Verknüpft die Antwort-Buttons (A-D) mit der Methode handleAnswerSingle.
+     * - Erkennt das Drücken der ESC-Taste, um ein Pause-Popup anzuzeigen.
+     * - Entfernt die ESC-Tastensteuerung, wenn das Fenster der Szene geschlossen wird.
+     */
     @FXML
     public void initialize() {
-        // Event-Handler für Antwort-Buttons
         optionAButton.setOnAction(event -> handleAnswerSingle(0));
         optionBButton.setOnAction(event -> handleAnswerSingle(1));
         optionCButton.setOnAction(event -> handleAnswerSingle(2));
         optionDButton.setOnAction(event -> handleAnswerSingle(3));
 
-        // pause popup wird angezeigt wenn man esc drückt
         rootPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, escHandler);
@@ -76,7 +73,10 @@ public class QuizSingleController {
         });
     }
 
-    // wenn man auf esc drückt, wird pause popup angezeigt
+    /**
+     * Event handler for detecting the ESC key press.
+     * Triggers the display of the pause popup when ESC is pressed.
+     */
     private final EventHandler<KeyEvent> escHandler = event -> {
         if (event.getCode() == KeyCode.ESCAPE) {
             showPausePopup();
@@ -113,16 +113,18 @@ public class QuizSingleController {
     }
 
     /**
-     * Lädt die aktuelle Frage und deren Antwortmöglichkeiten.
+     * Lädt die aktuelle Frage und aktualisiert die Anzeige.
+     * - Setzt Texte und Stile für Frage und Antwortmöglichkeiten.
+     * - Aktualisiert den Fortschritt und startet den Timer.
+     * - Zeigt Ergebnisse an, wenn keine weiteren Fragen vorhanden sind.
      */
     private void loadQuestion() {
         Question currentQuestion = game.getCurrentQuestion();
+
         if (currentQuestion != null) {
             resetButtonStyles();
             isAnswerSelected = false;
 
-            // Frage und Antwortmöglichkeiten setzen
-            // adjustable font size, falls die Frage zu lang ist
             questionLabel.setText(currentQuestion.getQuestionText());
             adjustFontSize(questionLabel);
 
@@ -135,33 +137,32 @@ public class QuizSingleController {
             optionDButton.setText(currentQuestion.getOptions().get(3));
             adjustFontSize(optionAButton);
 
-            // Fragezähler aktualisieren
             questionCounterLabel.setText((game.getCurrentQuestionIndex() + 1) + " of " + game.getQuestions().size() + " Questions");
 
             timeLimitSeconds = 30;
             stopTimer();
             startTimer();
         } else {
-            // Wenn keine weiteren Fragen vorhanden sind
             showResults();
         }
     }
 
     /**
-     * Handhabt die Auswahl einer Antwort.
-     * @param answerIndex Index der ausgewählten Antwort.
+     * Verarbeitet die Antwortauswahl eines Spielers.
+     * - Verhindert Mehrfachauswahlen durch Überprüfung, ob bereits eine Antwort ausgewählt wurde.
+     * - Überprüft die aktuelle Frage und markiert die Antworten (korrekt und ausgewählt).
+     * - Validiert die Antwort, berücksichtigt die verbleibende Zeit und aktualisiert den Punktestand.
+     * - Stoppt den Timer und lädt nach einer kurzen Pause die nächste Frage.
      */
     private void handleAnswerSingle(int answerIndex) {
-
-        // Nur einen Klick pro Frage zulassen
         if (isAnswerSelected) return;
         isAnswerSelected = true;
 
         Question currentQuestion = game.getCurrentQuestion();
+
         if (currentQuestion != null) {
             int correctIndex = currentQuestion.getCorrectOptionIndex();
 
-            // Richtige/falsche Antworten markieren
             markAnswers(correctIndex, answerIndex);
 
             int remainingTime = questionTimer.getRemainingTime();
@@ -178,11 +179,12 @@ public class QuizSingleController {
     }
 
     /**
-     * Zeigt die Ergebnisse des Spiels an.
+     * Zeigt die Ergebnisse des Quiz an und speichert den Punktestand.
+     * - Speichert den aktuellen Punktestand des Spielers in playerData.json.
+     * - Aktualisiert das Fragefeld, um das Ende des Quiz und den Punktestand anzuzeigen.
      */
     private void showResults() {
 
-        // Score in JSON speichern
         PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
         dataManager.updatePlayerInformation(currentPlayerLabel.getText().replace("Player: ", ""), game.getScore());
 
@@ -190,9 +192,9 @@ public class QuizSingleController {
     }
 
     /**
-     * Markiert die richtige und falsche Antwort auf dem Screen.
-     * @param correctIndex Index der richtigen Antwort.
-     * @param selectedIndex Index der vom Spieler ausgewählten Antwort.
+     * Markiert die Antwortoptionen basierend auf der Spielerwahl.
+     * - Hebt die richtige Antwort grün hervor.
+     * - Markiert eine falsche Auswahl des Spielers rot.
      */
     private void markAnswers(int correctIndex, int selectedIndex) {
         List<Button> buttons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
@@ -210,6 +212,9 @@ public class QuizSingleController {
 
     /**
      * Startet den Timer für die aktuelle Frage.
+     * - Initialisiert und startet einen neuen QuestionTimer mit der festgelegten Zeitbegrenzung.
+     * - Aktualisiert das Timer-Label regelmäßig im UI-Thread.
+     * - Verarbeitet automatisch eine unbeantwortete Frage, wenn der Timer abläuft.
      */
     private void startTimer() {
         questionTimer = new QuestionTimer(timeLimitSeconds);
@@ -233,7 +238,9 @@ public class QuizSingleController {
     }
 
     /**
-     * Stoppt den Timer.
+     * Stoppt den laufenden Timer.
+     * - Beendet den QuestionTimer, falls er aktiv ist.
+     * - Signalisiert das Stoppen des zugehörigen Timer-Threads.
      */
     private void stopTimer() {
         if (questionTimer != null) {
@@ -243,7 +250,9 @@ public class QuizSingleController {
     }
 
     /**
-     * Aktualisiert das Timer-Label im GUI.
+     * Aktualisiert das Timer-Label mit der verbleibenden Zeit.
+     * - Zeigt die verbleibenden Sekunden an und setzt das Standardstil.
+     * - Ändert die Anzeige auf rot und fett, wenn die Zeit abgelaufen ist.
      */
     private void updateTimerLabel() {
         int remainingTime = questionTimer.getRemainingTime();
@@ -288,6 +297,12 @@ public class QuizSingleController {
         labeled.setWrapText(true);
     }
 
+    /**
+     * Zeigt ein Pause-Popup an.
+     * - Lädt die FXML-Datei für das Pause-Popup und konfiguriert das Popup-Fenster.
+     * - Stellt das Hauptfenster als Besitzer des Popup-Fensters ein und zeigt das Popup an.
+     * - Startet den Timer erneut, wenn das Popup geschlossen wird.
+     */
     private void showPausePopup() {
         try {
             if (rootPane.getScene() == null || rootPane.getScene().getWindow() == null) {
@@ -323,4 +338,3 @@ public class QuizSingleController {
         }
     }
 }
-

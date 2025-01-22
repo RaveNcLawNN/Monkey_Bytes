@@ -1,8 +1,5 @@
 package monkeybytes.quiz.controller.screen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,40 +9,28 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import monkeybytes.quiz.controller.screen.SelectionDiffTopController;
-import monkeybytes.quiz.game.Player;
 import monkeybytes.quiz.game.PlayerDataManager;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProfileSingleController {
     @FXML
     private AnchorPane rootPane;
-
     @FXML
     private TextField newProfileTextField;
-
     @FXML
     private ComboBox<String> profileComboBox;
-
     @FXML
     private Button createProfileButton;
-
     @FXML
     private Button nextButton;
-
     @FXML
     private Label profileAlerts;
 
     private final PlayerDataManager playerDataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
 
     /**
-     * Initialisiert den Controller.
-     * Diese Methode wird automatisch nach dem Laden der FXML-Datei aufgerufen.
+     * Initialisiert die Benutzeroberfläche für das Profilmanagement.
+     * - Lädt verfügbare Profile beim Start.
+     * - Verknüpft Buttons mit Methoden.
      */
     @FXML
     public void initialize() {
@@ -63,13 +48,14 @@ public class ProfileSingleController {
     }
 
     /**
-     * Erstellt ein neues Profil basierend auf dem Benutzereingabewert.
+     * Erstellt ein neues Profil basierend auf der Benutzereingabe.
+     * - Überprüft, ob der eingegebene Profilname gültig ist (3-15 alphanumerische Zeichen).
+     * - Zeigt Erfolgs- und Fehlermeldung.
+     * - Fügt das Profil hinzu, falls es noch nicht existiert, und aktualisiert die Profilanzeige.
      */
     private void createProfile() {
-        // Holt den eingegebenen Profilnamen und entfernt überflüssige Leerzeichen.
         String profileName = newProfileTextField.getText().trim();
 
-        // Überprüft, ob das Eingabefeld leer ist.
         if (profileName.isEmpty() || !(profileName.matches("[a-zA-Z0-9]{3,15}"))) {
             profileAlerts.setText("Please choose a valid Name.");
             profileAlerts.setStyle("-fx-text-fill: red");
@@ -93,11 +79,11 @@ public class ProfileSingleController {
 
     /**
      * Wechselt zur Kategorie- und Schwierigkeitsauswahl.
+     * - Zeigt Alert an, wenn kein Profil ausgewählt ist.
      */
     private void goToCategorySelection() {
         String selectedProfile = profileComboBox.getValue();
 
-        // Überprüft, ob ein Profil ausgewählt wurde.
         if (selectedProfile == null || selectedProfile.isEmpty()) {
             profileAlerts.setText("Please choose or create a Profile.");
             profileAlerts.setStyle("-fx-text-fill: red");
@@ -119,57 +105,3 @@ public class ProfileSingleController {
         }
     }
 }
-
-
-
-
-
-
-//package monkeybytes.quiz.controller;
-//
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-//import javafx.fxml.FXML;
-//import javafx.scene.control.ComboBox;
-//import javafx.scene.control.TextField;
-//
-//import java.io.FileReader;
-//import java.io.FileWriter;
-//import java.lang.reflect.Type;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Parent;
-//import javafx.scene.control.Button;
-//import javafx.scene.layout.AnchorPane;
-//import javafx.stage.Stage;
-//
-//public class ProfileSingleController {
-//    @FXML
-//    private AnchorPane rootPane;
-//
-//    @FXML
-//    private Button testButton;
-//
-//    @FXML
-//    public void initialize() {
-//        // event handler
-//        testButton.setOnAction(event -> openSelectionScreen());
-//    }
-//
-//    private void openSelectionScreen() {
-//        try {
-//            // lädt den selection difficulty topic screen (noch nicht fertig - leitet jetzt mal direkt zum quiz single screen weiter)
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screens/quiz-single-screen.fxml"));
-//            Parent root = fxmlLoader.load();
-//
-//            // aktuelles fenster wird dynamisch verändert. kein neues wird geöffnet
-//            Stage currentStage = (Stage) rootPane.getScene().getWindow();
-//            currentStage.getScene().setRoot(root);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}

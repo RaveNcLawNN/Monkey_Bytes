@@ -2,24 +2,34 @@ package monkeybytes.quiz.game;
 
 import java.util.List;
 
-/*
-Die GameLogic-Klasse enthält die Kernlogik des Spiels. Sie wird von den Singleplayer- und Multiplayer-Klassen erweitert.
+/**
+ * Abstrakte Basisklasse für die Spiellogik.
+ * - Verwaltet die Liste der Fragen und den Index der aktuellen Frage.
+ * - Speichert die Punktestände der Spieler in einem Array.
+ * - Enthält eine Instanz des QuestionTimer zur Zeitsteuerung.
  */
-
-public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse nicht eigenständig verwendet wird, also nirgends selbst instanziiert wird.
-    // die folgenden Attribute sind protected (nicht private), damit die Unterklassen (Singleplayer & Multiplayer) auch darauf Zugriff haben.
-    protected List<Question> questions; // Liste der Fragen, die später dem Konstruktor von der API übergeben wird.
+public abstract class GameLogic {
+    protected List<Question> questions;
     protected int currentQuestionIndex = 0;
-    protected int[] playerScores; // speichert die Punktestände/den Punktestand des/der Spieler/s
+    protected int[] playerScores;
     public QuestionTimer questionTimer;
 
+    /**
+     * Konstruktor für GameLogic.
+     * - Initialisiert die Fragenliste und das Punktestand-Array basierend auf der Anzahl der Spieler.
+     * - Erstellt einen QuestionTimer mit der angegebenen Zeitbegrenzung in Sekunden.
+     */
     public GameLogic(List<Question> questions, int numberOfPlayers, int timeLimitSeconds) {
         this.questions = questions;
-        this.playerScores = new int[numberOfPlayers]; // initialisiert das playerScores-Array mit der Länge numberOfPlayers.
+        this.playerScores = new int[numberOfPlayers];
         this.questionTimer = new QuestionTimer(timeLimitSeconds);
     }
 
-    // gibt die aktuelle Frage zurück, wenn der aktuelle Index innerhalb der questions-Liste liegt. Wenn es keine Fragen mehr gibt, wird null zurückgegeben.
+    /**
+     * Gibt die aktuelle Frage zurück.
+     * - Überprüft, ob der aktuelle Fragenindex innerhalb der Fragenliste liegt.
+     * - Gibt die aktuelle Frage zurück oder `null`, wenn keine weiteren Fragen vorhanden sind.
+     */
     public Question getCurrentQuestion() {
         if (currentQuestionIndex < questions.size()) {
             return questions.get(currentQuestionIndex);
@@ -27,12 +37,16 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
         return null;
     }
 
-
-
-    // überprüft, ob die Antwort eines Spielers korrekt ist und aktualisiert den Punktestand.
+    /**
+     * Überprüft die Antwort eines Spielers und aktualisiert den Punktestand.
+     * - Holt die aktuelle Frage und vergleicht die ausgewählte Antwort mit der richtigen Option.
+     * - Berechnet den Punktestand basierend auf den verbleibenden Sekunden und fügt ihn dem Spieler hinzu, wenn die Antwort korrekt ist.
+     * - Gibt den aktuellen Punktestand des Spielers aus.
+     * - Erhöht den Fragenindex, um zur nächsten Frage zu wechseln.
+     */
     public void checkAnswer(int selectedOptionIndex, int playerIndex, int remainingTime) {
         Question currentQuestion = getCurrentQuestion();
-        if (currentQuestion != null && currentQuestion.getCorrectOptionIndex() == selectedOptionIndex) { // falls der Index der korrekten Antwort gleich dem Index der ausgewählten Antwort ist, gibt es Punkte.
+        if (currentQuestion != null && currentQuestion.getCorrectOptionIndex() == selectedOptionIndex) {
             int scoreToAdd = questionTimer.calculateScore(100,remainingTime);
             playerScores[playerIndex] += scoreToAdd;
         }
@@ -40,7 +54,12 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
         currentQuestionIndex++;
     }
 
-    // Geht zur nächsten Frage, falls vorhanden (für Multiplayer)
+    /**
+     * Wechselt zur nächsten Frage, falls verfügbar (nur Multiplayer).
+     * - Überprüft, ob der aktuelle Fragenindex kleiner als die Anzahl der Fragen minus eins ist.
+     * - Erhöht den Index für die nächste Frage und gibt true zurück, wenn Fragen übrig sind.
+     * - Gibt false zurück, wenn keine weiteren Fragen verfügbar sind.
+     */
     public boolean moveToNextQuestion() {
         System.out.println("DEBUG: GameLogic.moveToNextQuestion called. Current Index: " + currentQuestionIndex);
 
@@ -50,38 +69,18 @@ public abstract class GameLogic { // "abstract" wird benutzt, da diese Klasse ni
             return true;
         }
         System.out.println("DEBUG: No more questions available.");
-        return false; // Keine weiteren Fragen verfügbar
+        return false;
     }
 
-    // wenn der Index der aktuellen Frage größer/gleich der Anzahl der Fragen ist, gibt es keine weiteren Fragen und isGameOver() gibt true zurück.
-    public boolean isGameOver() {
-        return currentQuestionIndex >= questions.size();
-    }
-
-    // getter-Methode für den Punktestand. Wird von der GUI aufgerufen, um die Ergebnisse anzuzeigen.
-    public int[] getPlayerScores() {
-        return playerScores;
-    }
 
     public int getCurrentPlayer() {
         return currentQuestionIndex % playerScores.length;
     }
 
-    //getter-Methode, die den aktuellen Question Index zurückgibt.
     public int getCurrentQuestionIndex() {
         return currentQuestionIndex;
     }
 
-    public void setCurrentQuestionIndex(int index) {
-        currentQuestionIndex = index;
-    }
-
-    //gibt die Gesamtanzahl der Fragen zurück.
-    public int getTotalQuestions() {
-        return questions.size();
-    }
-
-    //gibt die gesamte Fragenliste zurück.
     public List<Question> getQuestions() {
         return questions;
     }

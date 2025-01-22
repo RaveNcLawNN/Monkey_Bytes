@@ -2,20 +2,20 @@ package monkeybytes.quiz.game;
 
 import java.util.List;
 
-/*
-Die Singleplayer-Klasse erweitert die GameLogic-Klasse und passt sie für Singleplayer an.
-*/
-
+/**
+ * Implementiert die Spiellogik für den Singleplayer-Modus.
+ */
 public class Singleplayer extends GameLogic {
 
+    /**
+     * Konstruktor für die Singleplayer-Klasse.
+     * Ruft den Konstruktor der Elternklasse auf.
+     */
     public Singleplayer (List<Question> questions) {
-        // "super" wird verwendet, um Konstruktoren und Methoden aus der Elternklasse ("Superklasse") aufzurufen.
-        // hier wird der GameLogic-Konstruktor aufgerufen, mit numberOfPlayers = 1.
-        super(questions, 1, 15); // das ist also der angepasste Singleplayer-Konstruktor.
+        super(questions, 1, 30);
     }
 
     public void checkAnswer (int selectedOptionIndex, int remainingTime) {
-        // die checkAnswer-Methode aus GameLogic wird aufgerufen und PlayerIndex auf 0 gesetzt, da es nur einen Spieler gibt.
         super.checkAnswer(selectedOptionIndex, 0, remainingTime);
     }
 

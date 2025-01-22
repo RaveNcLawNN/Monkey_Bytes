@@ -2,7 +2,6 @@ package monkeybytes.quiz.game;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,51 +11,54 @@ import java.util.Comparator;
 
 
 public class PlayerDataManager {
-    //Der Name des JSON Files, in dem die Player Data gespeichert wird. Wird immer playerData.json enthalten vermutlich.
     private final String fileName;
     private final Gson gson;
     private List<Player> players;
 
-    //Konstruktor
+    /**
+     * Konstruktor:
+     * - Initialisiert den Manager mit dem angegebenen Dateinamen für die Spieler-Daten.
+     * - Erstellt eine Gson-Instanz.
+     * - Lädt vorhandene Spieler-Daten aus der Datei.
+     */
     public PlayerDataManager(String fileName) {
         this.fileName = fileName;
-        //Erstellt einen GsonBuilder, der für die Bearbeitung der JSON Datei gebraucht wird.
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-        //loadPlayerData übergibt und speichert so alle Player Objekte in players ab.
         this.players = loadPlayerData();
     }
 
-    //Lädt die Player Data aus der JSON file.
+    /**
+     * Lädt Spieler-Daten aus der JSON-Datei.
+     * - Liest die Datei und speichert die JSON-Daten in ein Array von Player-Objekten.
+     * - Gibt die Daten als Liste zurück.
+     */
     private List<Player> loadPlayerData() {
-        //"try" schließt FileReader automatisch, wenn er nicht mehr benötigt wird.
-        //Liest die Datei, die in fileName hinterlegt ist.
         try (FileReader reader = new FileReader(fileName)) {
-            //Konvertiert die JSON Daten in ein Array von Player Objekten:
-            //Input == JSON Quelle (reader) und in was die Daten umgewandelt werden sollen (Array von Player Objekten).
             Player[] playersArray = gson.fromJson(reader, Player[].class);
-            //Wandelt um und übergibt das playersArray als ArrayList.
             return new ArrayList<>(List.of(playersArray));
-        //Falls die Datei nicht existiert, wir eine leere ArrayList zurückgegeben. Sollte nicht passieren.
         } catch (IOException e) {
             return new ArrayList<>();
         }
     }
 
-    // Speichert Player Data in die JSON-Datei
+    /**
+     * Speichert die Spieler-Daten in der JSON-Datei.
+     * Sortiert die Spieler-Liste absteigend nach Punktestand.
+     */
     private void savePlayerData() {
-        //Sortiert Players nach Score (absteigend):
         players.sort(Comparator.comparingInt(Player::getScore).reversed());
-        //Öffnet und schreibt in die Datei aus fileName.
         try (FileWriter writer = new FileWriter(fileName)) {
-            //Übernimmt die Liste an Player Objekten und den Writer, der die Daten direkt ins JSON File schreibt.
             gson.toJson(players, writer);
-        //gibt eine Fehlermeldung + Zusatzinfo aus, falls etwas nicht funktioniert.
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //Eine extra Methode im Player Objekte zu erstellen. Bei Erstellung wird ein Score von 0 übergeben.
+    /**
+     * Fügt ein neues Profil hinzu, falls es noch nicht existiert.
+     * - Überprüft, ob der Profilname bereits in der Spieler-Liste vorhanden ist.
+     * - Fügt ein neues Profil mit einem Startpunktestand von 0 hinzu und speichert die Daten.
+     */
     public boolean addProfile(String profileName) {
         for (Player player : players) {
             if (player.getName().equals(profileName)) {
@@ -69,7 +71,10 @@ public class PlayerDataManager {
         return true;
     }
 
-    //Aktualisiert Player Information, wenn neuer Score höher ist als der alte.
+    /**
+     * Aktualisiert die Spielerinformationen mit einem neuen Punktestand.
+     * Aktualisiert den Punktestand nur, wenn der neue Wert höher ist als der bestehende.
+     */
     public void updatePlayerInformation(String playerName, int newScore) {
         for (Player player : players) {
             if (player.getName().equals(playerName) && player.getScore() < newScore) {
@@ -84,7 +89,6 @@ public class PlayerDataManager {
         return players;
     }
 
-    //Gibt eine Liste mit Player Namen zurück.
     public List<String> getPlayerNames() {
         List<String> names = new ArrayList<>();
         for (Player player : players) {
