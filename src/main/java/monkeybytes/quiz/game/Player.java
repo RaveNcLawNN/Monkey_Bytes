@@ -20,34 +20,12 @@ public class Player {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getScore() {
         return score;
     }
 
     public void setScore(int score) {
         this.score = score;
-    }
-
-    public void addScore (int points) {
-        this.score += points;
-    }
-
-    public void resetScore() {
-        this.score = 0;
-    }
-
-    private int lastSelectedOption = -1; // Speichert die letzte gewählte Antwort
-
-    public int getLastSelectedOption() {
-        return lastSelectedOption;
-    }
-
-    public void setLastSelectedOption(int lastSelectedOption) {
-        this.lastSelectedOption = lastSelectedOption;
     }
 
     @Override

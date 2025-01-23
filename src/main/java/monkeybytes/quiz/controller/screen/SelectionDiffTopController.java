@@ -114,6 +114,7 @@ public class SelectionDiffTopController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Could not load next screen.");
         }
     }
 }

@@ -24,8 +24,9 @@ public class Multiplayer extends GameLogic {
     }
 
     /**
-     * Überschreiben von checkAnswer(...), um
-     * 2 Fragen pro Antwort sammeln zu können. KEIN currentQuestionIndex++ hier, weil wir erst warten
+     * Überprüft die Antwort und aktualisiert die Punkte
+     * überschreibt checkAnswer von GameLogic, um 2 Fragen
+     * pro Antwort sammeln zu können. KEIN currentQuestionIndex++ hier, weil wir erst warten
      * müssen bis beide Spieler geantwortet haben. Indexerhöhung wird hier im MP in handleAnswerMulti() bzw.
      * processEndOfRound() gemacht.
      */

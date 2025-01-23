@@ -228,6 +228,7 @@ public class QuizSingleController {
                     Platform.runLater(this::updateTimerLabel);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    System.out.println("Thread interrupted.");
                 }
             }
 
@@ -335,6 +336,7 @@ public class QuizSingleController {
             startTimer();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Could not show pause popup.");
         }
     }
 }

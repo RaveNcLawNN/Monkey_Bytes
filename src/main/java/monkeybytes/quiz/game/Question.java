@@ -41,10 +41,4 @@ public class Question {
         return correctOptionIndex;
     }
 
-//    // gibt die Frage und ihre Antwortmöglichkeiten als String zurück
-//    @Override
-//    public String toString() {
-//        return "Frage: " + questionText + "\nAntwortmöglichkeiten: " + options;
-//    }
-
 }

@@ -106,7 +106,7 @@ public class QuizMultiController {
             // 3) Liste aus 10 Fragen holen
             List<Question> questions = triviaAPIService.fetchQuestions(10, categoryId, difficulty);
 
-            // 4) Player-Daten aus JSON holen
+            // 4) Player-Daten aus JSON holen oder erstellen
             PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
             Player player1 = dataManager.getPlayers().stream()
                     .filter(player -> player.getName().equals(profile1))
@@ -152,7 +152,6 @@ public class QuizMultiController {
             for (int i = 0; i < options.size(); i++) {
                 Button button = answerButtons.get(i);
                 button.setText(options.get(i));
-//                button.setStyle("");
                 resetButtonStyles();
                 adjustFontSize(button);
             }
@@ -175,7 +174,7 @@ public class QuizMultiController {
             return;
         }
 
-        // 2) Markieren, dass geklickt wurde (verhindert Mehrfachklicks)
+        // 2) Flag, dass geklickt wurde (verhindert Mehrfachklicks)
         isAnswerSelected = true;
         // 3) Wer ist gerade dran?
         int currentPlayerIndex = game.getCurrentPlayer();
@@ -230,6 +229,7 @@ public class QuizMultiController {
                 });
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                System.out.println("Thread interrupted.");
             }
         }).start();
     }
@@ -276,6 +276,9 @@ public class QuizMultiController {
         playerSwitchOverlay.toFront();
         setAnswerButtonsDisabled(true);
 
+//        updatePlayerDisplay();
+        updateCurrentPlayerLabel();
+
         isAnswerSelected = false; // Zurücksetzen, um die neue Eingabe zuzulassen
     }
 
@@ -283,15 +286,20 @@ public class QuizMultiController {
      * Aktualisiert die Labels der Spieleranzeige (aktueller Spieler und Scores).
      */
     private void updatePlayerDisplay() {
-        Player currentPlayer = game.getPlayers().get(game.getCurrentPlayer());
-
-        currentPlayerLabel.setText("Player: " + currentPlayer.getName());
+//        Player currentPlayer = game.getPlayers().get(game.getCurrentPlayer());
+//
+//        currentPlayerLabel.setText("Player: " + currentPlayer.getName());
 
         List<Player> players = game.getPlayers();
         player1ScoreLabel.setText(players.get(0).getName() + ": " + game.getScoreCurrentPlayer(0) + " Points");
         player2ScoreLabel.setText(players.get(1).getName() + ": " + game.getScoreCurrentPlayer(1) + " Points");
     }
 
+    private void updateCurrentPlayerLabel() {
+        Player currentPlayer = game.getPlayers().get(game.getCurrentPlayer());
+
+        currentPlayerLabel.setText("Player: " + currentPlayer.getName());
+    }
 
     /**
      * Färbt die korrekte Antwort grün, alle anderen rot.
@@ -358,6 +366,7 @@ public class QuizMultiController {
                     Platform.runLater(this::updateTimerLabel);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    System.out.println("Thread interrupted.");
                 }
             }
 
@@ -408,7 +417,6 @@ public class QuizMultiController {
      * Gilt sowohl für Label als auch Button, da beide von Labeled erben.
      */
     private void adjustFontSize(Labeled labeled) {
-        // Hol dir den Text
         String txt = labeled.getText();
         int length = (txt != null) ? txt.length() : 0;
 
@@ -416,9 +424,11 @@ public class QuizMultiController {
         if (length > 300) {
             labeled.setStyle("-fx-font-size: 10px;");
         } else if (length > 200) {
-            labeled.setStyle("-fx-font-size: 14px;");
+            labeled.setStyle("-fx-font-size: 12px;");
         } else if (length > 100) {
-            labeled.setStyle("-fx-font-size: 18px;");
+            labeled.setStyle("-fx-font-size: 16px;");
+        } else if (length > 50) {
+            labeled.setStyle("-fx-font-size: 20px;");
         } else {
             labeled.setStyle("-fx-font-size: 24px;");
         }
@@ -462,6 +472,7 @@ public class QuizMultiController {
             startTimer();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Could not show pause popup.");
         }
     }
 }

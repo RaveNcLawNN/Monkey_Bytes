@@ -102,6 +102,7 @@ public class ProfileSingleController {
             stage.getScene().setRoot(root);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Could not load next screen.");
         }
     }
 }

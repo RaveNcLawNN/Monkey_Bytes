@@ -161,6 +161,7 @@ public class TriviaAPIService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Could not fetch token.");
         }
         // Falls ein Fehler auftritt, null zurückgeben
         return null;
@@ -182,6 +183,7 @@ public class TriviaAPIService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Could not reset token.");
         }
     }
 }
