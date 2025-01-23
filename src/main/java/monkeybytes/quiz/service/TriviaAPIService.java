@@ -34,12 +34,20 @@ public class TriviaAPIService {
     private String sessionToken;
 
     /**
-     * Konstruktor: Initialisiert den Service und lädt Kategorien.
+     * Konstruktor: Initialisiert den Service, lädt Session-Token und Kategorien.
      */
     public TriviaAPIService() {
         this.sessionToken = fetchSessionToken(); // Session-Token um eindeutige Fragen zu generieren
     }
 
+    /**
+     * Lädt Fragen mit einer fixed category und variablem Schwierigkeitsgrad von der API
+     * @param amount      Anzahl der gewünschten Fragen (bei uns 10)
+     * @param categoryId  z. B. "22" für Geography
+     * @param difficulty  easy, medium, hard
+     * @return Liste an Question-Objekten, die wir in unserem Quiz verwenden.
+     * @throws Exception wenn beim HTTP-Request etwas schiefläuft
+     */
     public List<Question> fetchQuestions(int amount, String categoryId, String difficulty) throws Exception {
         List<Question> questions = requestQuestions(amount, categoryId, difficulty);
 
@@ -52,66 +60,82 @@ public class TriviaAPIService {
     }
 
     /**
-     * Baut die Anfrage-URL zusammen, ruft die API auf und parst
+     * Wird von fetchQuestions aufgerufen, führt den HTTP Request durch.
+     * Baut die Anfrage-URL zusammen, ruft die API auf und konvertiert
      * die JSON-Antwort in Question-Objekte.
+     * @param amount     Anzahl der gewünschten Fragen
+     * @param categoryId zB 22
+     * @param difficulty zB easy
+     * @return Liste von Question-Objekten
+     * @throws Exception wenn die Verbindung fehlschlägt oder HTTP-Code != 200
      */
     private List<Question> requestQuestions(int amount, String categoryId, String difficulty) throws Exception {
+        // 1) URL mit Query-Parametern bauen, inkl. Session-Token:
+        // zB "https://opentdb.com/api.php?amount=10&category=22&difficulty=easy&type=multiple&token=ABC123"
         String urlString = String.format(
                 "%s?amount=%d&category=%s&difficulty=%s&type=multiple&token=%s",
                 API_URL, amount, categoryId, difficulty, sessionToken
         );
 
-        // Verbindung herstellen
+        // 2) Verbindung herstellen
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
-        // Prüfen, ob wir StatusCode = 200 bekommen
+        // 3) Prüfen ob Verbindung erfolgreich war (muss 200 sein)
         if (connection.getResponseCode() != 200) {
             throw new RuntimeException("API-Connection failed: HTTP-Code " + connection.getResponseCode());
         }
 
-        // JSON-Antwort parsen
+        // 4) JSON-Antwort parsen. Liest InputStream und konvertiert ihn via Gson in ein JSON-Objekt
         InputStreamReader reader = new InputStreamReader(connection.getInputStream());
         JsonObject jsonResponse = new Gson().fromJson(reader, JsonObject.class);
 
+        // 5) results enthält ein Array mit den Fragen
         JsonArray results = jsonResponse.getAsJsonArray("results");
         List<Question> questions = new ArrayList<>();
 
-        // Jede Frage in ein Question-Objekt überführen
+        // 6) Jede Frage im Array durchgehen und in ein Question-Objekt umwandeln
         for (var element : results) {
             JsonObject questionJson = element.getAsJsonObject();
+            // unescapeHtml14 damit die Sonderzeichen richtig angezeigt werden
             String questionText = StringEscapeUtils.unescapeHtml4(questionJson.get("question").getAsString());
             String correctAnswer = StringEscapeUtils.unescapeHtml4(questionJson.get("correct_answer").getAsString());
 
-            // Alle Antwortoptionen sammeln
+            // Liste der Antwortmöglichkeiten inkl. der richtigen Antwort
             List<String> options = new ArrayList<>();
             options.add(correctAnswer);
 
+            // JSON-Array "incorrect_answers" mit 3 falschen Antworten
             for (var incorrectAnswer : questionJson.getAsJsonArray("incorrect_answers")) {
                 options.add(StringEscapeUtils.unescapeHtml4(incorrectAnswer.getAsString()));
             }
 
-            // Mischen und Index der korrekten Antwort merken
+            // 7) Mischen und Index der korrekten Antwort merken
             Collections.shuffle(options);
+
+            // 8) Index der richtigen Antwort finden
             int correctIndex = options.indexOf(correctAnswer);
 
+            // 9) Question-Objekt erzeugen und zur Liste hinzufügen
             questions.add(new Question(questionText, options, correctIndex));
         }
 
+        // 10) Liste von Question-Ojekten ist fertig
         return questions;
     }
 
+    /**
+     * Gibt eine Liste der festen Kategorienamen zurück. Wird in SelectionDiffTop verwendet
+     */
     public List<String> getFixedCategories() {
         // Gibt nur die Namen der festen Kategorien zurück
         return new ArrayList<>(FIXED_CATEGORY_IDS.keySet());
     }
 
     /**
-     * Gibt die ID einer festen Kategorie zurück.
-     *
-     * @param categoryName Name der Kategorie.
-     * @return ID der Kategorie oder Standardwert "9" für General Knowledge.
+     * Sucht zu einem Kategorie-Namen die passende ID heraus.
+     * Falls nicht gefunden, wird "9" (General Knowledge) zurückgegeben.
      */
     public String getFixedCategoryId(String categoryName) {
         // Ruft die ID der festen Kategorie ab, wenn nicht gefunden dann wirds auf 9 gesetzt (General Knowledge)
@@ -120,12 +144,11 @@ public class TriviaAPIService {
 
     /**
      * Ruft einen Session-Token von der API ab.
-     *
-     * @return Der Session-Token.
+     * Passiert im Konstruktor, damit man bei Spielbeginn einen neuen Token hat.
      */
     private String fetchSessionToken() {
         try {
-            // Token-API aufrufen, um einen neuen Session-Token zu erhalten
+            // Token anfordern
             URL url = new URL("https://opentdb.com/api_token.php?command=request");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -133,20 +156,23 @@ public class TriviaAPIService {
             if (connection.getResponseCode() == 200) {
                 InputStreamReader reader = new InputStreamReader(connection.getInputStream());
                 JsonObject response = new Gson().fromJson(reader, JsonObject.class);
-                return response.get("token").getAsString(); // Token aus der Antwort extrahieren
+                // Token aus der Antwort extrahieren
+                return response.get("token").getAsString();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Falls ein Fehler auftritt, null zurückgeben
+        // Falls ein Fehler auftritt, null zurückgeben
+        return null;
     }
 
     /**
      * Setzt den Session-Token zurück.
+     * Wird in fetchQuestions verwendet, falls es einen Fehler gibt
      */
     private void resetSessionToken() {
         try {
-            // Token-Reset-API aufrufen
+            // Token resetten
             URL url = new URL("https://opentdb.com/api_token.php?command=reset&token=" + sessionToken);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

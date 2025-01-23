@@ -22,41 +22,37 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Der ProfileMultiController kümmert sich um die Auswahl/Erstellung
+ * von zwei Spielerprofilen.
+ * - 2 Textfelder und 2 ComboBoxen
+ * - "Create" für neues Profil, welches in die
+ *   JSON-Datenbank (playerData.json) geschrieben wird.
+ * - "Next" für nächsten Screen (selection-difficulty-topic-screen.fxml),
+ *   wo man die Kategorie & den Schwierigkeitsgrad auswählt.
+ */
 public class ProfileMultiController {
     @FXML
     private AnchorPane rootPane;
 
     @FXML
-    private TextField player1ProfileTextField;
+    private TextField player1ProfileTextField, player2ProfileTextField;
 
     @FXML
-    private TextField player2ProfileTextField;
+    private ComboBox<String> player1ProfileComboBox, player2ProfileComboBox;
 
     @FXML
-    private ComboBox<String> player1ProfileComboBox;
+    private Button createPlayer1ProfileButton, createPlayer2ProfileButton, nextButton;
 
     @FXML
-    private ComboBox<String> player2ProfileComboBox;
-
-    @FXML
-    private Button createPlayer1ProfileButton;
-
-    @FXML
-    private Button createPlayer2ProfileButton;
-
-    @FXML
-    private Button nextButton;
-
-    @FXML
-    private Label profileAlerts1;
-
-    @FXML
-    private Label profileAlerts2;
-
-    private List<Player> players = new ArrayList<>();
+    private Label profileAlerts1, profileAlerts2;
 
     private final PlayerDataManager playerDataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
 
+    /**
+     * initialize() wird aufgerufen, nachdem das FXML geladen ist.
+     * Wir befüllen hier die ComboBoxen und legen Button-Handler fest.
+     */
     @FXML
     public void initialize() {
         loadProfiles();
@@ -75,7 +71,11 @@ public class ProfileMultiController {
     }
 
     /**
-     * Erstellt ein neues Profil basierend auf dem übergebenen Textfeld und fügt es in das Dropdown-Menü ein.
+     * Erstellt ein neues Profil für Player 1, basierend auf dem Textfeld.
+     * - Prüft, ob der Name gültig ist (Regex [a-zA-Z0-9]{3,15})
+     * - Ruft playerDataManager.addProfile(name) auf,
+     *   das ein Player-Objekt ins JSON schreibt, falls es nicht existiert.
+     * - Fügt das neu erstellte Profil in die ComboBox ein.
      */
     private void createProfileOne(TextField profileTextField, ComboBox<String> profileComboBox) {
         String profileName = profileTextField.getText().trim();
@@ -101,6 +101,9 @@ public class ProfileMultiController {
         }
     }
 
+    /**
+     * Gleiches Prinzip wie ProfileOne
+     */
     private void createProfileTwo(TextField profileTextField, ComboBox<String> profileComboBox) {
         String profileName = profileTextField.getText().trim();
 
@@ -126,12 +129,19 @@ public class ProfileMultiController {
     }
 
     /**
-     * Wechselt zur Kategorieauswahl.
+     * Wechselt zum nächsten Screen (selection-difficulty-topic-screen.fxml),
+     * wo man Kategorie & Difficulty auswählt.
+     * Vorher prüfen wir:
+     * - Sind zwei Profile ausgewählt?
+     * - Sind sie verschieden?
+     * Wenn nein -> Fehlermeldung in profileAlerts1/2.
+     * Wenn ja -> Übergib Player-Namen an den nächsten Controller (SelectionDiffTopController).
      */
     private void goToCategorySelection() {
         String player1Profile = player1ProfileComboBox.getValue();
         String player2Profile = player2ProfileComboBox.getValue();
 
+        // 1) Prüfen, ob beide ComboBoxen etwas ausgewählt haben
         if (player1Profile == null || player2Profile == null || player1Profile.isEmpty() || player2Profile.isEmpty()) {
             profileAlerts1.setText("Select TWO Players.");
             profileAlerts1.setStyle("-fx-text-fill: darkred");
@@ -142,6 +152,7 @@ public class ProfileMultiController {
             return;
         }
 
+        // 2) Prüfen, ob es zwei unterschiedliche Profile sind
         if (player1Profile.equals(player2Profile)) {
             profileAlerts1.setText("Select two DIFFERENT Players.");
             profileAlerts1.setStyle("-fx-text-fill: darkred");
@@ -152,12 +163,11 @@ public class ProfileMultiController {
             return;
         }
 
-        // Übergebe die Profildaten an den nächsten Controller (z. B. Multiplayer-Kategorie- und Schwierigkeitsauswahl)
+        // 3) Wenn alles passt -> Lade den Screen "selection-difficulty-topic-screen.fxml"
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/monkeybytes/quiz/screen/selection-difficulty-topic-screen.fxml"));
             Parent root = loader.load();
 
-            // Hole den Controller der Kategorieauswahl
             SelectionDiffTopController controller = loader.getController();
 
             // Profil und Modus anpassen

@@ -23,6 +23,13 @@ import monkeybytes.quiz.service.TriviaAPIService;
 
 import java.util.List;
 
+/**
+ * QuizMultiController steuert den Ablauf eines Multiplayer-Quiz-Spiels.
+ * Er ist mit dem FXML "quiz-multi-screen.fxml" verknüpft und verwaltet
+ * das UI (zB die Buttons, Labels, den Switch-Screen für Spielerwechsel)
+ * und die Kommunikation mit dem "Multiplayer"-Objekt.
+ */
+
 public class QuizMultiController {
 
     @FXML
@@ -45,16 +52,16 @@ public class QuizMultiController {
 
     @FXML
     public void initialize() {
-        // Buttons in eine Liste übernehmen
+        // 1) Speichert Antwortbuttons in einer Liste
         answerButtons = List.of(optionAButton, optionBButton, optionCButton, optionDButton);
 
-        // Ereignisse für Antwort-Buttons einrichten
+        // 2) Event Handler für Antwortbuttons
         optionAButton.setOnAction(event -> handleAnswerMulti(0));
         optionBButton.setOnAction(event -> handleAnswerMulti(1));
         optionCButton.setOnAction(event -> handleAnswerMulti(2));
         optionDButton.setOnAction(event -> handleAnswerMulti(3));
 
-        // pause popup wird angezeigt wenn man esc drückt
+        // 3) ESC -> Pause popup
         rootPane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, escHandler);
@@ -75,17 +82,31 @@ public class QuizMultiController {
         }
     };
 
-
+    /**
+     * Wird von SelectionDiffTopController aufgerufen, nachdem der User
+     * die Kategorie und Difficulty gewählt hat und zwei Profile (Player 1, Player 2).
+     * - TriviaAPIService wird erzeugt (neuer Session-Token).
+     * - 10 Fragen werden geholt (API-Call: fetchQuestions(...)).
+     * - Player-Objekte werden aus playerData.json geladen.
+     * - Ein Multiplayer-Spiel (game) wird erstellt.
+     * - UI wird aktualisiert (Scores, Playername) und der Switch-Screen gezeigt.
+     *
+     * @param category   Kategorie-Name (z. B. "Geography")
+     * @param difficulty Difficulty-Name (z. B. "easy")
+     * @param profile1   Name von Player 1
+     * @param profile2   Name von Player 2
+     */
     public void setApiParameters(String category, String difficulty, String profile1, String profile2) {
         try {
-            // Trivia-Daten von der API abrufen
+            // 1) API-Objekt erzeugen -> holt Session Token im Konstruktor
             TriviaAPIService triviaAPIService = new TriviaAPIService();
+            // 2) Kategorie in ID umwandeln
             String categoryId = triviaAPIService.getFixedCategoryId(category);
 
-            // 10 Fragen holen
+            // 3) Liste aus 10 Fragen holen
             List<Question> questions = triviaAPIService.fetchQuestions(10, categoryId, difficulty);
 
-            // Spielerprofil-Daten laden
+            // 4) Player-Daten aus JSON holen
             PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
             Player player1 = dataManager.getPlayers().stream()
                     .filter(player -> player.getName().equals(profile1))
@@ -96,104 +117,115 @@ public class QuizMultiController {
                     .findFirst()
                     .orElse(new Player(profile2, 0));
 
-            // Multiplayer-Spiel erstellen
+            // 5) Multiplayer-Objekt erstellen
             game = new Multiplayer(questions, List.of(player1, player2));
 
-            // Spiel vorbereiten
+            // 6) UI aktualisieren und ersten SwitchScreen anzeigen
             updatePlayerDisplay();
             showPlayerSwitchScreen(); // Spiel startet (Spielerwechsel anzeigen)
+
         } catch (Exception e) {
             e.printStackTrace();
             questionLabel.setText("Could not fetch questions. Please try again.");
         }
     }
 
+    /**
+     * Lädt die aktuelle Frage aus dem Multiplayer-Game und zeigt sie im UI.
+     * Wenn keine weitere Frage mehr existiert (Null), rufen wir showResults() auf.
+     */
     private void loadQuestion() {
         Question currentQuestion = game.getCurrentQuestion();
 
-        System.out.println("DEBUG: Current Question Index: " + game.getCurrentQuestionIndex());
-        System.out.println("DEBUG: Current Question: " + (currentQuestion != null ? currentQuestion.getQuestionText() : "No more questions"));
-
+        // 1) Wenn es noch eine Frage gibt
         if (currentQuestion != null) {
-            resetButtonStyles(); // Buttons vollständig zurücksetzen
+            resetButtonStyles(); // Buttons vollständig zurücksetzen (entfernt rot/grüne Markierungen)
             isAnswerSelected = false; // Spielzustand resetten
-            setAnswerButtonsDisabled(false); // Antworten wieder aktivieren
+            setAnswerButtonsDisabled(false); // Spieler kann wieder klicken
 
-            // Frage und Antwortoptionen setzen
+            // b) Frage setzen
             questionLabel.setText(currentQuestion.getQuestionText());
             adjustFontSize(questionLabel);
 
+            // c) Antworten in die Buttons setzen
             List<String> options = currentQuestion.getOptions();
             for (int i = 0; i < options.size(); i++) {
                 Button button = answerButtons.get(i);
                 button.setText(options.get(i));
-                button.setStyle(""); // Sicherstellen, dass Styles zurückgesetzt werden
+//                button.setStyle("");
+                resetButtonStyles();
                 adjustFontSize(button);
             }
 
-            startTimer(); // Timer neu starten
+            // d) Timer neu starten
+            startTimer();
         } else {
-            showResults(); // Alle Fragen beendet
+            // 2) Keine Fragen mehr -> zeigt Ergebnis
+            showResults();
         }
     }
 
-
     /**
      * Wird aufgerufen, wenn ein Spieler eine Antwort anklickt.
+     * @param selectedOptionIndex - 0-3
      */
     private void handleAnswerMulti(int selectedOptionIndex) {
+        // 1) Prüfen, ob schon geklickt wurde oder gar keine Frage existiert
         if (isAnswerSelected || game.getCurrentQuestion() == null) {
-            System.out.println("DEBUG: Answer already selected or no question available.");
             return;
         }
 
+        // 2) Markieren, dass geklickt wurde (verhindert Mehrfachklicks)
         isAnswerSelected = true;
+        // 3) Wer ist gerade dran?
         int currentPlayerIndex = game.getCurrentPlayer();
 
-        // Antwort des Spielers registrieren
+        // 4) Antwort auswerten und ggf. Score erhöhen
         int remainingTimeForBonus = questionTimer.getRemainingTime();
         game.checkAnswer(selectedOptionIndex, currentPlayerIndex, remainingTimeForBonus);
-        System.out.println("DEBUG: Player " + currentPlayerIndex + " answered. Question Index: " + game.getCurrentQuestionIndex());
 
-        // Wenn ALLE Spieler geantwortet haben, wird die Runde beendet.
+        // 5) Wenn das der zweite Spieler war, wird die Runde beendet.
         if (currentPlayerIndex == game.getPlayers().size() - 1) {
-            System.out.println("DEBUG: End of round. Processing...");
             processEndOfRound();
         } else {
-            // Zum nächsten Spieler wechseln (Zwischenscreen anzeigen)
-            System.out.println("DEBUG: Switching to the next player.");
+            // 6) Ansonsten wird zum nächsten Spieler gewechselt (Zwischenscreen anzeigen)
             game.nextPlayer();
             showPlayerSwitchScreen();
         }
     }
 
+    /**
+     * Wird aufgerufen, sobald beide Spieler geantwortet haben.
+     * - Markiere die korrekte Antwort
+     * - Warte 2 Sekunden
+     * - Zeige den Punktestand
+     * - Gehe zur nächsten Frage oder showResults()
+     */
     private void processEndOfRound() {
+        // 1) Aktuelle Frage holen (falls null -> weiter zur nächsten Frage)
         Question currentQuestion = game.getCurrentQuestion();
-        System.out.println("DEBUG: End of Round.");
-        System.out.println("DEBUG: Current Question Index BEFORE moveToNextQuestion: " + game.getCurrentQuestionIndex());
 
         if (currentQuestion == null) {
-            System.out.println("DEBUG: No more questions.");
-            moveToNextQuestion(); // Sicherstellen, dass fortgefahren wird
+            moveToNextQuestion(); // nur zur Sicherheit, beendet das Spiel in diesem Fall
+            showResults();
             return;
         }
 
-        // Richtige/falsche Antworten markieren
+        // 2) Richtige/falsche Antworten markieren
         markAnswers(currentQuestion.getCorrectOptionIndex());
 
+        // 3) 2 Sekunden Pause, dann Scores updaten und nächste Frage
         new Thread(() -> {
             try {
-                Thread.sleep(2000); // 2-sekündige Pause
+                Thread.sleep(2000);
                 Platform.runLater(() -> {
                     updatePlayerDisplay();
-                    saveScores();// Punkte aktualisieren
-                    if (game.moveToNextQuestion()) { // Fortschritt zur nächsten Frage
-                        System.out.println("DEBUG: Current Question Index AFTER moveToNextQuestion: " + game.getCurrentQuestionIndex());
+                    saveScores();
+                    if (game.moveToNextQuestion()) {
                         ((Multiplayer) game).resetToFirstPlayer();
                         showPlayerSwitchScreen();
                     } else {
-                        System.out.println("DEBUG: Game Over!");
-                        showResults(); // Spiel enden
+                        showResults();
                     }
                 });
             } catch (InterruptedException e) {
@@ -202,18 +234,25 @@ public class QuizMultiController {
         }).start();
     }
 
+    /**
+     * moveToNextQuestion() kann an manchen Stellen aufgerufen werden,
+     * falls wir sofort zur nächsten Frage wollen (z. B. wenn currentQuestion=null).
+     */
     private void moveToNextQuestion() {
-        System.out.println("DEBUG: moveToNextQuestion (Controller) called."); // Debugging
 
         if (game.moveToNextQuestion()) {
-            System.out.println("DEBUG: Moving to next question."); // Debugging
             showPlayerSwitchScreen(); // Vor der nächsten Frage Zwischenscreen anzeigen
         } else {
-            System.out.println("DEBUG: No more questions available. Showing results."); // Debugging
             showResults();
         }
     }
 
+    /**
+     * Wird aufgerufen, wenn man im Switch-Screen auf "Ready" klickt.
+     * - Overlay verschwindet
+     * - Timer wird zurückgesetzt
+     * - loadQuestion() für den aktuellen Player
+     */
     @FXML
     public void onReadyButtonClicked() {
         playerSwitchOverlay.setVisible(false); // Overlay ausblenden
@@ -236,7 +275,7 @@ public class QuizMultiController {
         updatePlayerDisplay();
 
         playerSwitchOverlay.setVisible(true);
-        playerSwitchOverlay.toFront(); // Überlagert die UI
+        playerSwitchOverlay.toFront();
         setAnswerButtonsDisabled(true);
 
         isAnswerSelected = false; // Zurücksetzen, um die neue Eingabe zuzulassen
@@ -277,12 +316,16 @@ public class QuizMultiController {
         answerButtons.forEach(button -> button.setDisable(disabled));
     }
 
+    /**
+     * Entfernt alle roten/grünen Styles der Antwortbuttons.
+     */
     private void resetButtonStyles() {
         answerButtons.forEach(button -> button.setStyle(null));
     }
 
     /**
      * Speichert Punktestände in JSON (PlayerDataManager).
+     * Aufgerufen nach jeder Runde in processEndOfRound()
      */
     private void saveScores() {
         PlayerDataManager dataManager = new PlayerDataManager("src/main/resources/data/playerData.json");
@@ -364,6 +407,7 @@ public class QuizMultiController {
 
     /**
      * Passt die Schriftgröße an.
+     * Gilt sowohl für Label als auch Button, da beide von Labeled erben.
      */
     private void adjustFontSize(Labeled labeled) {
         // Hol dir den Text
@@ -386,6 +430,7 @@ public class QuizMultiController {
 
     /**
      * ESC -> Pause-Popup
+     * Timer wird gestoppt und nach Schließen fortgesetzt
      */
     private void showPausePopup() {
         try {

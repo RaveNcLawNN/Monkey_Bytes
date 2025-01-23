@@ -2,16 +2,24 @@ package monkeybytes.quiz.game;
 
 import java.util.List;
 
-/*
-Die Question-Klasse repräsentiert eine einzelne Quizfrage mit ihren Antwortmöglichkeiten.
+/**
+ * Die Klasse Question repräsentiert eine einzelne Quizfrage mit vier Antwortoptionen.
+ * - questionText: der eigentliche Fragentext
+ * - options: eine Liste aller möglichen Antworten
+ * - correctOptionIndex: der Index in 'options' der richtigen Antwort
+ * Question-Objekte werden in TriviaAPIService.requestQuestions(...)
+ * erzeugt, wenn wir die JSON-Daten des API-Aufrufs in Java-Objekte umwandeln.
  */
-
 public class Question {
     private String questionText; // Der Text der Frage
     private List<String> options; // Antwortmöglichkeiten
     private int correctOptionIndex; // Index der richtigen Antwort
 
-    // Konstruktor für die Erstellung einer Frage
+    /**
+     * Konstruktor:
+     * Wir übergeben den Fragetext, die 4 Antwortmöglichkeiten (options),
+     * und den Index der richtigen Antwort (correctOptionIndex).
+     */
     public Question(String questionText, List <String> options, int correctOptionIndex) {
         this.questionText = questionText;
         this.options = options;
@@ -33,15 +41,10 @@ public class Question {
         return correctOptionIndex;
     }
 
-    // überprüft, ob die ausgewählte Antwort korrekt ist
-    public boolean isCorrectAnswer (int selectedOptionIndex) {
-        return selectedOptionIndex == correctOptionIndex;
-    }
-
-    // gibt die Frage und ihre Antwortmöglichkeiten als String zurück
-    @Override
-    public String toString() {
-        return "Frage: " + questionText + "\nAntwortmöglichkeiten: " + options;
-    }
+//    // gibt die Frage und ihre Antwortmöglichkeiten als String zurück
+//    @Override
+//    public String toString() {
+//        return "Frage: " + questionText + "\nAntwortmöglichkeiten: " + options;
+//    }
 
 }

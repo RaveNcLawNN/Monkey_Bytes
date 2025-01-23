@@ -28,7 +28,7 @@ public abstract class GameLogic {
     /**
      * Gibt die aktuelle Frage zurück.
      * - Überprüft, ob der aktuelle Fragenindex innerhalb der Fragenliste liegt.
-     * - Gibt die aktuelle Frage zurück oder `null`, wenn keine weiteren Fragen vorhanden sind.
+     * - Gibt die aktuelle Frage zurück oder null, wenn keine weiteren Fragen vorhanden sind.
      */
     public Question getCurrentQuestion() {
         if (currentQuestionIndex < questions.size()) {
@@ -61,14 +61,11 @@ public abstract class GameLogic {
      * - Gibt false zurück, wenn keine weiteren Fragen verfügbar sind.
      */
     public boolean moveToNextQuestion() {
-        System.out.println("DEBUG: GameLogic.moveToNextQuestion called. Current Index: " + currentQuestionIndex);
 
         if (currentQuestionIndex < questions.size() - 1) {
             currentQuestionIndex++;
-            System.out.println("DEBUG: Incremented Question Index to " + currentQuestionIndex);
             return true;
         }
-        System.out.println("DEBUG: No more questions available.");
         return false;
     }
 
