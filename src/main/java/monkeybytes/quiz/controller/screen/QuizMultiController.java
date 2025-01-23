@@ -272,8 +272,6 @@ public class QuizMultiController {
 
         switchLabel.setText(nextPlayer.getName() + "'s turn!");
 
-        updatePlayerDisplay();
-
         playerSwitchOverlay.setVisible(true);
         playerSwitchOverlay.toFront();
         setAnswerButtonsDisabled(true);
